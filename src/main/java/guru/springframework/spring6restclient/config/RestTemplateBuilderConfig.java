@@ -40,7 +40,6 @@ public class RestTemplateBuilderConfig {
         return RestClient.builder(restTemplateBuilder.build());
     }
 
-
     @Bean
     RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer,
                                             OAuthClientInterceptor interceptor) {

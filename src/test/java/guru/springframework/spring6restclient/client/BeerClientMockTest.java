@@ -220,8 +220,7 @@ public class BeerClientMockTest {
 
     private void mockGetOperation() {
         server.expect(method(HttpMethod.GET))
-                .andExpect(requestToUriTemplate(URL +
-                        BeerClientImpl.GET_BEER_BY_ID_PATH, dto.getId()))
+                .andExpect(requestToUriTemplate(URL + BeerClientImpl.GET_BEER_BY_ID_PATH, dto.getId()))
                 .andExpect(header("Authorization", BEARER_TEST))
                 .andRespond(withSuccess(dtoJson, MediaType.APPLICATION_JSON));
     }
@@ -238,7 +237,7 @@ public class BeerClientMockTest {
         assertThat(dtos.getContent().size()).isGreaterThan(0);
     }
 
-    BeerDTO getBeerDto(){
+    private BeerDTO getBeerDto(){
         return BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .price(new BigDecimal("10.99"))

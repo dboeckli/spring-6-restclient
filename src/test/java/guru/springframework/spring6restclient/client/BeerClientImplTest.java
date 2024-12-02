@@ -2,6 +2,7 @@ package guru.springframework.spring6restclient.client;
 
 import guru.springframework.spring6restclient.dto.BeerDTO;
 import guru.springframework.spring6restclient.dto.BeerStyle;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Disabled // this test are currently failling because they need the auth server and backend server up and running. we should consider to start those via docker
 class BeerClientImplTest {
 
     @Autowired

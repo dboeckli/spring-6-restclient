@@ -1,4 +1,11 @@
 # spring-6-restclient
+
+This project acts as a client (similar to the spring-6-resttemplate) project to the spring-6-rest-mvc which runs on port 8080.
+Required other modules up and running:
+- this application runs on port 8085
+- authentication server on port 9000
+- mvc module running on port 8080
+
 This repository is for an example application built in [Spring Framework 6 - Beginner to Guru](https://www.udemy.com/course/spring-framework-6-beginner-to-guru/?referralCode=2BD0B7B7B6B511D699A9) online course
 
 The application is a simple Spring Boot 3 / Spring Framework 6 web application. It is used to help students learn how

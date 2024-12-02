@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Disabled // this test are currently failling because they need the auth server and backend server up and running. we should consider to start those via docker
+@Disabled // this test are currently failing because they need the auth server and backend server up and running. we should consider to start those via docker
 class BeerClientImplTest {
 
     @Autowired

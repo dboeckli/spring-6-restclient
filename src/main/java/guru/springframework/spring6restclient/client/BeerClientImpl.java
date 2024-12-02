@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -39,7 +40,20 @@ public class BeerClientImpl implements BeerClient {
 
     @Override
     public BeerDTO createBeer(BeerDTO newDto) {
-        return null;
+        RestClient restClient = restClientBuilder.build();
+
+        URI location = restClient.post()
+            .uri(uriBuilder -> uriBuilder.path(GET_BEER_PATH).build())
+            .body(newDto)
+            .retrieve()
+            .toBodilessEntity()
+            .getHeaders()
+            .getLocation();
+        
+        return restClient.get()
+            .uri(location.getPath())
+            .retrieve()
+            .body(BeerDTO.class);
     }
 
     @Override

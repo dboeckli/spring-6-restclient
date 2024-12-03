@@ -1,3 +1,31 @@
 spring:
   application:
     name: spring-6-restclient
+  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+      client:
+        registration:
+          springauth:
+            client-id: messaging-client
+            client-secret: secret
+            scope[0]: message.read
+            scope[1]: message.write
+            authorization-grant-type: client_credentials
+            provider: springauth
+        provider:
+          springauth:
+            authorization-uri: http://localhost:9000/auth2/authorize
+            token-uri: http://localhost:9000/oauth2/token
+
+server:
+  port: 8085
+
+rest:
+  template:
+    # spring-6-rest-mvc run on port 8081 be we are going via the spring-6-gateway running on port 8080
+    rootUrl: http://localhost:8081
+    gatewayUrl: http://localhost:8080

@@ -14,11 +14,13 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Disabled // this test are currently failing because they need the auth server and backend server up and running. we should consider to start those via docker
+@Disabled 
+// TODO: this test are currently failing because they need the auth server and backend server up and running. we should consider to start those via docker
+// TODO: consult Readme for explanation.    
 class BeerClientImplTest {
 
     @Autowired
-    BeerClientImpl beerClient;
+    BeerClient beerClient;
 
     @Test
     void testDeleteBeer() {
@@ -77,25 +79,19 @@ class BeerClientImplTest {
 
     @Test
     void getBeerById() {
-
         Page<BeerDTO> beerDTOS = beerClient.listBeers();
-
         BeerDTO dto = beerDTOS.getContent().getFirst();
-
         BeerDTO byId = beerClient.getBeerById(dto.getId());
-
         assertNotNull(byId);
     }
 
     @Test
     void listBeersNoBeerName() {
-
         beerClient.listBeers(null, null, null, null, null);
     }
 
     @Test
     void listBeers() {
-
         beerClient.listBeers("ALE", null, null, null, null);
     }
 }

@@ -22,6 +22,9 @@ public class RestTemplateBuilderConfig {
     @Value("${rest.template.rootUrl}")
     String rootUrl;
 
+    @Value("${rest.template.gatewayUrl}")
+    String gatewayUrl;
+
     @Bean
     OAuth2AuthorizedClientManager auth2AuthorizedClientManager(ClientRegistrationRepository clientRegistrationRepository,
                                                                OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
@@ -44,10 +47,10 @@ public class RestTemplateBuilderConfig {
     RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer,
                                             OAuthClientInterceptor interceptor) {
 
-        assert rootUrl != null;
+        assert gatewayUrl != null;
 
         return configurer.configure(new RestTemplateBuilder())
             .additionalInterceptors(interceptor)
-            .uriTemplateHandler(new DefaultUriBuilderFactory(rootUrl));
+            .uriTemplateHandler(new DefaultUriBuilderFactory(gatewayUrl));
     }
 }

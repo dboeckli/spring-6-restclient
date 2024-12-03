@@ -20,8 +20,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BeerClientImpl implements BeerClient {
 
-    public static final String GET_BEER_PATH = "/api/v1/beer";
-    public static final String GET_BEER_BY_ID_PATH = "/api/v1/beer/{beerId}";
+    public static final String BEER_PATH = "/api/v1/beer";
+    public static final String GET_BEER_BY_ID_PATH    = BEER_PATH + "/getBeerById/{beerId}";
+    public static final String LIST_BEER_PATH         = BEER_PATH + "/listBeers";
+    public static final String CREATE_BEER_PATH       = BEER_PATH + "/createBeer";
+    public static final String UPDATE_BEER_BY_ID_PATH = BEER_PATH + "/editBeer/{beerId}";
+    public static final String PATCH_BEER_BY_ID_PATH  = BEER_PATH + "/patchBeer/{beerId}";
+    public static final String DELETE_BEER_BY_ID_PATH = BEER_PATH + "/deleteBeer/{beerId}";
 
     private final RestClient.Builder restClientBuilder;
 
@@ -34,7 +39,7 @@ public class BeerClientImpl implements BeerClient {
     public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
         RestClient restClient = restClientBuilder.build();
 
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath(GET_BEER_PATH);
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath(LIST_BEER_PATH);
 
         if (beerName != null) {
             uriComponentsBuilder.queryParam("beerName", beerName);
@@ -77,7 +82,7 @@ public class BeerClientImpl implements BeerClient {
         RestClient restClient = restClientBuilder.build();
 
         URI location = restClient.post()
-            .uri(uriBuilder -> uriBuilder.path(GET_BEER_PATH).build())
+            .uri(uriBuilder -> uriBuilder.path(CREATE_BEER_PATH).build())
             .body(newDto)
             .retrieve()
             .toBodilessEntity()
@@ -95,7 +100,7 @@ public class BeerClientImpl implements BeerClient {
         RestClient restClient = restClientBuilder.build();
         
         restClient.put()
-            .uri(uriBuilder -> uriBuilder.path(GET_BEER_BY_ID_PATH).build(beerDto.getId()))
+            .uri(uriBuilder -> uriBuilder.path(UPDATE_BEER_BY_ID_PATH).build(beerDto.getId()))
             .body(beerDto)
             .retrieve()
             .toBodilessEntity();
@@ -108,7 +113,7 @@ public class BeerClientImpl implements BeerClient {
         RestClient restClient = restClientBuilder.build();
         
         restClient.delete()
-            .uri(uriBuilder -> uriBuilder.path(GET_BEER_BY_ID_PATH).build(beerId))
+            .uri(uriBuilder -> uriBuilder.path(DELETE_BEER_BY_ID_PATH).build(beerId))
             .retrieve()
             .toBodilessEntity();
     }

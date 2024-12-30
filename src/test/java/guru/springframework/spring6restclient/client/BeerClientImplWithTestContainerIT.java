@@ -149,9 +149,9 @@ class BeerClientImplWithTestContainerIT {
 
     @BeforeAll
     static void setUp() {
-        log.info("#### auth server listening on port {}", AUTH_SERVER_PORT);
-        log.info("#### gateway server  listening on port {}", REST_GATEWAY_PORT);
-        log.info("#### mvc server listening on port {}", REST_MVC_PORT);
+        log.info("#### auth server listening on port {} and host: {} and port {}", AUTH_SERVER_PORT, authServer.getHost(), authServer.getFirstMappedPort());
+        log.info("#### gateway server  listening on port {} and host: {} and port {}", REST_GATEWAY_PORT, restGateway.getHost(), restGateway.getFirstMappedPort());
+        log.info("#### mvc server listening on port {} and host: {} and port {}", REST_MVC_PORT, restMvc.getHost(), restMvc.getFirstMappedPort());
     }
 
     @Test

@@ -1,6 +1,11 @@
 spring:
   application:
     name: spring-6-restclient
+  docker:
+    compose:
+      enabled: true
+      stop:
+        command: down  
   
   security:
     oauth2:

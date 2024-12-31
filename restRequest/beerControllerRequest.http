@@ -1,0 +1,52 @@
+###
+GET http://localhost:8081/api/v1/beer/listBeers
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJraWQiOiIxNDQwMWI5My0yNmU4LTQwNzctOTkyNy0zODY3MWFiMzJhOTIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczNTU4MTI3NSwic2NvcGUiOlsibWVzc2FnZS5yZWFkIiwibWVzc2FnZS53cml0ZSJdLCJpc3MiOiJodHRwOi8vYXV0aC1zZXJ2ZXI6OTAwMCIsImV4cCI6MTczNTU4MTg3NSwiaWF0IjoxNzM1NTgxMjc1LCJqdGkiOiJjZjVjNDVlNi1hMjMyLTQ3Y2EtOTc4ZS03NGZkYTRjNmE5MDUifQ.eq8-_zBhLfLfSpUq7ZAC2SageFWSbgKFW7LXmKXHKriqQbzFK5j-lr6f5ykc1AlrsfUjkb-56mSiuv864mWf2scoOiB-GFlhtyvqDVDyrxe0dR5mgIT7U-3qFSBkMApRDMm4uNRIW86jzetH1xugYvvBavoPQWSXOXmnKTwla4gqK8nXaArIPmAW3wPg3A7rb_rhZ54XZJgvzvO6GsmvpM_hsMjNzTgSSyUEPL93UYGB7vCU9aV_66JJz60Jdx0pAIjF4WuGzjdA6e7wtN2ZSI6pV46wFttiLHRCgX0fKTLcskrG-U_fytt60n_HgBtqeOJvghMbr3cdVWcdHYk2Zw
+
+###
+GET http://localhost:8081/api/v1/beer/getBeerById/49e0182c-b4d9-4eb1-ab9e-839c40c0c85f
+Accept: application/json
+Content-Type: application/json
+
+###
+POST http://localhost:8081/api/v1/beer/createBeer
+Accept: application/json
+Content-Type: application/json
+
+{
+  "version": 0,
+  "beerName": "presidente",
+  "beerStyle": "LAGER",
+  "upc": "xx",
+  "quantityOnHand": 5,
+  "price": 27.16
+}
+
+###
+PUT http://localhost:8081/api/v1/beer/editBeer/4908886e-8df4-4df1-bdb0-6ac0bae289af
+Accept: application/json
+Content-Type: application/json
+
+{
+  "version": 0,
+  "beerName": "altered Beername",
+  "beerStyle": "LAGER",
+  "upc": "",
+  "quantityOnHand": 0,
+  "price": 27.16
+}
+
+###
+PATCH http://localhost:8081/api/v1/beer/patchBeer/9d07c34b-36fb-4108-b9ca-0de3393ea2ab
+Accept: application/json
+Content-Type: application/json
+
+{
+  "beerName": "patched Beername"
+}
+
+###
+DELETE http://localhost:8081/api/v1/beer/deleteBeer/6ab05faf-743d-443b-8ad6-5e8ae531d12d
+Accept: application/json
+Content-Type: application/json

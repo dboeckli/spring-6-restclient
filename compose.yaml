@@ -1,0 +1,47 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: restdb  
+      MYSQL_USER: restadmin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"  
+    expose:
+      - "3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "restadmin", "-ppassword" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  auth-server:
+    container_name: auth-server
+    image: domboeckli/spring-6-auth-server:0.0.1-SNAPSHOT
+    ports:
+      - "9000:9000"
+    expose:
+      - 9000
+    environment:
+      SPRING_SECURITY_OAUTH2_AUTHORIZATION_SERVER_ISSUER: http://auth-server:9000
+  rest-mvc:
+    container_name: rest-mvc
+    image: domboeckli/spring-6-rest-mvc:0.0.1
+    ports:
+      - "8081:8081"
+    expose:
+      - 8081
+    environment:
+      SPRING_PROFILES_ACTIVE: localmysql
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/restdb
+      LOGGING_LEVEL_ORG_APACHE_KAFKA_CLIENTS_NETWORKCLIENT: ERROR
+    depends_on:
+      mysql:
+        condition: service_healthy
+        required: true       
+      auth-server:
+        condition: service_started
+        required: true 

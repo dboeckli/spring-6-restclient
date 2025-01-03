@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spring Framework Guru - Beer Details</title>
+
+    <!-- Bootstrap CSS -->
+    <!--<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/js/bootstrap.min.js"></script>-->
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Beer Details</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${beer.beerName}">Beer Name</h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${beer.beerStyle}">Beer Style</h6>
+            <p class="card-text">ID: <span th:text="${beer.id}">123</span></p>
+            <p class="card-text">UPC: <span th:text="${beer.upc}">UPC</span></p>
+            <p class="card-text">Price: $<span th:text="${beer.price}">0.00</span></p>
+            <p class="card-text">Quantity On Hand: <span th:text="${beer.quantityOnHand}">0</span></p>
+        </div>
+    </div>
+
+    <a href="/beers" class="btn btn-primary mt-3">Back to Beer List</a>
+</div>
+
+</body>
+</html>

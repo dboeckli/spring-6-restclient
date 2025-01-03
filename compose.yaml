@@ -45,3 +45,29 @@ services:
       auth-server:
         condition: service_started
         required: true 
+  gateway:
+    container_name: gateway
+    image: domboeckli/spring-6-gateway:0.0.1-SNAPSHOT
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8080
+      
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_ID: mvc_route
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://rest-mvc:8081
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]: Path=/api/v1/**
+      
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_ID: auth_route
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_URI: http://auth-server:9000
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]: Path=/oauth2/**
+    depends_on:
+      auth-server:
+        condition: service_started
+        required: true
+      rest-mvc:
+        condition: service_started
+        required: true

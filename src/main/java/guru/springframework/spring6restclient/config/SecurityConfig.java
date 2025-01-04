@@ -17,6 +17,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests -> {
                 authorizeRequests
                     .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()  // permit all actuator endpoints
+                    .requestMatchers("/beers/**").permitAll()
+                    .requestMatchers("/beer/**").permitAll()
+                    .requestMatchers("/webjars/**").permitAll()
+                    .requestMatchers("/favicon.ico").permitAll()
                     .anyRequest().authenticated();
             });
         return http.build();

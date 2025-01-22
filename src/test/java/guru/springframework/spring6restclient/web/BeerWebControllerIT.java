@@ -1,21 +1,23 @@
 package guru.springframework.spring6restclient.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restclient.client.BeerClient;
 import guru.springframework.spring6restclient.dto.BeerDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import static guru.springframework.spring6restclient.test.util.docker.MvcServerTestUtil.checkMvcDatabaseInitDone;
+import static guru.springframework.spring6restclient.test.util.docker.MvcServerTestUtil.checkMvcReady;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,21 +31,12 @@ class BeerWebControllerIT {
     BeerWebController controller;
 
     @BeforeAll
-    static void setUp(@Autowired BeerClient beerClient) {
-        // Wait for the database to be fully initialized
-        Awaitility.await()
-            .atMost(30, TimeUnit.SECONDS)
-            .pollInterval(1, TimeUnit.SECONDS)
-            .until(() -> {
-                try {
-                    Page<BeerDTO> page = beerClient.listBeers(null, null, null, null, null);
-                    log.info("### Waiting for database to be fully initialized. Inserted: Beers: {}", page.getTotalElements());
-                    return page.getTotalElements() >= 2413;
-                } catch (Exception e) {
-                    return false;
-                }
-            });
-        log.info("Database is fully initialized.");
+    static void setUp(@Autowired BeerClient beerClient,
+                      @Autowired TestRestTemplate restTemplate,
+                      @Autowired ObjectMapper objectMapper,
+                      @Value("${rest.template.rootUrl}") String mvcUrl) {
+        checkMvcReady(restTemplate, objectMapper, mvcUrl);
+        checkMvcDatabaseInitDone(beerClient);
     }
 
     @Test

@@ -26,6 +26,7 @@
       "ignoreUnstable": false,
       "separateMinorPatch": true,
       "separateMajorMinor": true,
+      "separatePatchReleases": true,
       "automerge": false,
       "automergeType": "pr",
       "ignoreTests": true

@@ -27,7 +27,7 @@ services:
       SPRING_SECURITY_OAUTH2_AUTHORIZATION_SERVER_ISSUER: http://auth-server:9000
   rest-mvc:
     container_name: rest-mvc
-    image: domboeckli/spring-6-rest-mvc:0.0.1
+    image: domboeckli/spring-6-rest-mvc:0.0.3-SNAPSHOT
     ports:
       - "8081:8081"
     expose:

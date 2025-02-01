@@ -75,7 +75,7 @@ services:
         required: true
         
   busybox:
-    image: busybox:1.36.1
+    image: busybox:1.37.0
     container_name: busybox
     depends_on:
       auth-server:

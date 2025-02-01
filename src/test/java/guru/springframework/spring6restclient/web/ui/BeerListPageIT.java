@@ -58,6 +58,9 @@ class BeerListPageIT {
     @Order(0)
     void testBeerListPageLoads() {
         webDriver.get("http://localhost:" + port + "/beers");
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        wait.until(ExpectedConditions.titleIs("Beer List"));
         assertEquals("Beer List", webDriver.getTitle());
     }
 
@@ -65,7 +68,9 @@ class BeerListPageIT {
     @Order(1)
      void testBeerListContainsItems() {
         webDriver.get("http://localhost:" + port + "/beers");
-        List<WebElement> beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
         
         log.info("### Found {} beer rows", beerRows.size());
         
@@ -77,9 +82,10 @@ class BeerListPageIT {
     @Order(2)
     void testPaginationExists() {
         webDriver.get("http://localhost:" + port + "/beers");
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         // Check if pagination exists
-        WebElement pagination = webDriver.findElement(By.id("pagination"));
+        WebElement pagination = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("pagination")));
         assertNotNull(pagination, "Pagination should exist");
 
         // Check if 'Previous' and 'First' are disabled on the first page

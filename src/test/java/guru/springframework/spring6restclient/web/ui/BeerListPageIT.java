@@ -1,5 +1,6 @@
 package guru.springframework.spring6restclient.web.ui;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("it")
+@Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class BeerListPageIT {
 
@@ -55,6 +57,8 @@ class BeerListPageIT {
      void testBeerListContainsItems() {
         webDriver.get("http://localhost:" + port + "/beers");
         List<WebElement> beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
+        
+        log.info("### Found {} beer rows", beerRows.size());
         
         assertFalse(beerRows.isEmpty(), "Beer list should contain items");
         assertEquals(25, beerRows.size());

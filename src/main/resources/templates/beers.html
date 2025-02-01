@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Spring Framework Guru - Beer List</title>
+    <title>Beer List</title>
 
     <!-- Bootstrap CSS -->
     <!--
@@ -16,17 +16,17 @@
 <body>
 <div class="container mt-5">
     <h1 class="mb-4">Beer List</h1>
-    
+
     <!-- Pagination -->
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}" id="pagination">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? disabled">
-                <a class="page-link" th:href="@{/beers(pageNumber=${currentPage})}" tabindex="-1">Previous</a>
+                <a class="page-link" th:href="@{/beers(pageNumber=${currentPage})}" tabindex="-1" id="previousPage">Previous</a>
             </li>
 
             <!-- First Page -->
             <li class="page-item" th:classappend="${currentPage == 0} ? disabled">
-                <a class="page-link" th:href="@{/beers(pageNumber=0)}">First</a>
+                <a class="page-link" th:href="@{/beers(pageNumber=0)}" id="firstPage">First</a>
             </li>
 
             <!-- Ellipsis if needed -->
@@ -37,7 +37,7 @@
             <!-- Page numbers -->
             <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
                 th:classappend="${pageNum == currentPage} ? active">
-                <a class="page-link" th:href="@{/beers(pageNumber=${pageNum})}" th:text="${pageNum + 1}">1</a>
+                <a class="page-link" th:href="@{/beers(pageNumber=${pageNum})}" th:text="${pageNum + 1}" th:id="'page' + ${pageNum + 1}">1</a>
             </li>
 
             <!-- Ellipsis if needed -->
@@ -47,16 +47,16 @@
 
             <!-- Last Page -->
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? active" th:if="${totalPages > 1 && endPage < totalPages - 1}">
-                <a class="page-link" th:href="@{/beers(pageNumber=${totalPages - 1})}" th:text="${totalPages}">Last</a>
+                <a class="page-link" th:href="@{/beers(pageNumber=${totalPages - 1})}" th:text="${totalPages}" id="lastPage">Last</a>
             </li>
 
             <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? disabled">
-                <a class="page-link" th:href="@{/beers(pageNumber=${currentPage + 2})}">Next</a>
+                <a class="page-link" th:href="@{/beers(pageNumber=${currentPage + 2})}" id="nextPage">Next</a>
             </li>
         </ul>
     </nav>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover" id="beerTable">
         <thead class="table-dark">
         <tr>
             <th>ID</th>
@@ -66,17 +66,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="beer : ${beers}">
-            <td th:text="${beer.id}">123</td>
-            <td th:text="${beer.beerName}">test</td>
-            <td th:text="${beer.beerStyle}">test</td>
+        <tr th:each="beer : ${beers}" th:id="'beer-' + ${beer.id}">
+            <td th:text="${beer.id}" th:id="'beerId-' + ${beer.id}">123</td>
+            <td th:text="${beer.beerName}" th:id="'beerName-' + ${beer.id}">test</td>
+            <td th:text="${beer.beerStyle}" th:id="'beerStyle-' + ${beer.id}">test</td>
             <td>
-                <a th:href="@{/beer/{id}(id=${beer.id})}" class="btn btn-primary btn-sm">View</a>
+                <a th:href="@{/beer/{id}(id=${beer.id})}" class="btn btn-primary btn-sm" th:id="'viewBeer-' + ${beer.id}">View</a>
             </td>
         </tr>
         </tbody>
     </table>
-
     
 </div>
 </body>

@@ -1,15 +1,18 @@
 package guru.springframework.spring6restclient.web.ui;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import guru.springframework.spring6restclient.client.BeerClient;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
@@ -19,10 +22,13 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
+import static guru.springframework.spring6restclient.test.util.docker.MvcServerTestUtil.checkMvcDatabaseInitDone;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("it")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class BeerListPageIT {
 
@@ -30,6 +36,11 @@ class BeerListPageIT {
     private int port;
 
     private WebDriver webDriver;
+
+    @BeforeAll
+    static void setUp(@Autowired BeerClient beerClient) {
+        checkMvcDatabaseInitDone(beerClient);
+    }
 
     @BeforeEach
     public void setUp() {
@@ -46,26 +57,37 @@ class BeerListPageIT {
     }
 
     @Test
+    @Order(0)
     void testBeerListPageLoads() {
         webDriver.get("http://localhost:" + port + "/beers");
+        waitForPageLoad();
         assertEquals("Beer List", webDriver.getTitle());
     }
 
     @Test
+    @Order(1)
      void testBeerListContainsItems() {
         webDriver.get("http://localhost:" + port + "/beers");
-        List<WebElement> beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
+        waitForPageLoad();
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+        
+        log.info("### Found {} beer rows", beerRows.size());
         
         assertFalse(beerRows.isEmpty(), "Beer list should contain items");
         assertEquals(25, beerRows.size());
     }
 
     @Test
+    @Order(2)
     void testPaginationExists() {
         webDriver.get("http://localhost:" + port + "/beers");
+        waitForPageLoad();
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         // Check if pagination exists
-        WebElement pagination = webDriver.findElement(By.id("pagination"));
+        WebElement pagination = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("pagination")));
         assertNotNull(pagination, "Pagination should exist");
 
         // Check if 'Previous' and 'First' are disabled on the first page
@@ -94,11 +116,14 @@ class BeerListPageIT {
     }
 
     @Test
+    @Order(3)
     void testViewButtonWorks() {
         webDriver.get("http://localhost:" + port + "/beers");
+        waitForPageLoad();
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
-        // Find the first "View" button
-        WebElement firstViewButton = webDriver.findElement(By.cssSelector("#beerTable tbody tr:first-child .btn-primary"));
+        // Wait for the table and the first "View" button to be present
+        WebElement firstViewButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#beerTable tbody tr:first-child .btn-primary")));
         String href = firstViewButton.getAttribute("href");
 
         assertNotNull(href, "View button should have a href attribute");
@@ -111,7 +136,6 @@ class BeerListPageIT {
         firstViewButton.click();
 
         // Wait for the new page to load
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.titleIs("Beer Details"));
 
         // Find the beer ID element
@@ -126,4 +150,10 @@ class BeerListPageIT {
                 "Displayed beer ID should match the expected ID")
         );
    }
+
+    private void waitForPageLoad() {
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+        wait.until((ExpectedCondition<Boolean>) wd ->
+            Objects.equals(((JavascriptExecutor) wd).executeScript("return document.readyState"), "complete"));
+    }
 }

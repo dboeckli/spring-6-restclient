@@ -16,6 +16,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      
   auth-server:
     container_name: auth-server
     image: domboeckli/spring-6-auth-server:0.0.3-SNAPSHOT
@@ -25,6 +26,7 @@ services:
       - 9000
     environment:
       SPRING_SECURITY_OAUTH2_AUTHORIZATION_SERVER_ISSUER: http://auth-server:9000
+  
   rest-mvc:
     container_name: rest-mvc
     image: domboeckli/spring-6-rest-mvc:0.0.3-SNAPSHOT
@@ -71,3 +73,47 @@ services:
       rest-mvc:
         condition: service_started
         required: true
+        
+  busybox:
+    image: busybox:1.36.1
+    container_name: busybox
+    depends_on:
+      auth-server:
+        condition: service_started
+        required: true
+      rest-mvc:
+        condition: service_started
+        required: true
+      gateway:
+        condition: service_started
+        required: true  
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "
+            echo 'Checking BusyBox readiness...' &&
+            test -f /bin/sh &&
+            wget -qO- http://auth-server:9000/actuator/health/readiness | grep -q '\"status\":\"UP\"' &&
+            wget -qO- http://rest-mvc:8081/actuator/health/readiness | grep -q '\"status\":\"UP\"' &&
+            wget -qO- http://gateway:8080/actuator/health/readiness | grep -q '\"status\":\"UP\"'
+          " ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      /bin/sh -c '
+      while true; do
+        auth_health=$$(wget -q -O - http://auth-server:9000/actuator/health/readiness 2>/dev/null)
+        mvc_health=$$(wget -q -O - http://rest-mvc:8081/actuator/health/readiness 2>/dev/null)
+        gateway_health=$$(wget -q -O - http://gateway:8080/actuator/health/readiness 2>/dev/null)
+
+        echo "{
+          \"timestamp\": \"$$(date -Iseconds)\",
+          \"services\": {
+            \"auth-server\": $$auth_health,
+            \"rest-mvc\": $$mvc_health,
+            \"gateway_health\": $$gateway_health
+          }
+        }"
+
+        sleep 30
+      done
+      '      

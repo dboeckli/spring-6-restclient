@@ -2,10 +2,7 @@ package guru.springframework.spring6restclient.web.ui;
 
 import guru.springframework.spring6restclient.client.BeerClient;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("it")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class BeerListPageIT {
@@ -57,12 +55,14 @@ class BeerListPageIT {
     }
 
     @Test
+    @Order(0)
     void testBeerListPageLoads() {
         webDriver.get("http://localhost:" + port + "/beers");
         assertEquals("Beer List", webDriver.getTitle());
     }
 
     @Test
+    @Order(1)
      void testBeerListContainsItems() {
         webDriver.get("http://localhost:" + port + "/beers");
         List<WebElement> beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
@@ -74,6 +74,7 @@ class BeerListPageIT {
     }
 
     @Test
+    @Order(2)
     void testPaginationExists() {
         webDriver.get("http://localhost:" + port + "/beers");
 
@@ -107,6 +108,7 @@ class BeerListPageIT {
     }
 
     @Test
+    @Order(3)
     void testViewButtonWorks() {
         webDriver.get("http://localhost:" + port + "/beers");
 

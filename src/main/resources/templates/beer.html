@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Spring Framework Guru - Beer Details</title>
+    <title>Beer Details</title>
 
     <!-- Bootstrap CSS -->
     <!--<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -13,20 +13,20 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4">Beer Details</h1>
+    <h1 class="mb-4" id="pageTitle">Beer Details</h1>
 
-    <div class="card">
+    <div class="card" id="beerDetailsCard">
         <div class="card-body">
-            <h5 class="card-title" th:text="${beer.beerName}">Beer Name</h5>
-            <h6 class="card-subtitle mb-2 text-muted" th:text="${beer.beerStyle}">Beer Style</h6>
-            <p class="card-text">ID: <span th:text="${beer.id}">123</span></p>
-            <p class="card-text">UPC: <span th:text="${beer.upc}">UPC</span></p>
-            <p class="card-text">Price: $<span th:text="${beer.price}">0.00</span></p>
-            <p class="card-text">Quantity On Hand: <span th:text="${beer.quantityOnHand}">0</span></p>
+            <h5 class="card-title" th:text="${beer.beerName}" id="beerName">Beer Name</h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${beer.beerStyle}" id="beerStyle">Beer Style</h6>
+            <p class="card-text">ID: <span th:text="${beer.id}" id="beerId">123</span></p>
+            <p class="card-text">UPC: <span th:text="${beer.upc}" id="beerUpc">UPC</span></p>
+            <p class="card-text">Price: $<span th:text="${beer.price}" id="beerPrice">0.00</span></p>
+            <p class="card-text">Quantity On Hand: <span th:text="${beer.quantityOnHand}" id="beerQuantity">0</span></p>
         </div>
     </div>
 
-    <a href="/beers" class="btn btn-primary mt-3">Back to Beer List</a>
+    <a href="/beers" class="btn btn-primary mt-3" id="backToListButton">Back to Beer List</a>
 </div>
 
 </body>

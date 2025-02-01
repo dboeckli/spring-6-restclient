@@ -18,7 +18,7 @@ services:
       retries: 5
   auth-server:
     container_name: auth-server
-    image: domboeckli/spring-6-auth-server:0.0.1-SNAPSHOT
+    image: domboeckli/spring-6-auth-server:0.0.3-SNAPSHOT
     ports:
       - "9000:9000"
     expose:

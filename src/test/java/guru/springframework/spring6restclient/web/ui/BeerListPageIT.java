@@ -111,9 +111,10 @@ class BeerListPageIT {
     @Order(3)
     void testViewButtonWorks() {
         webDriver.get("http://localhost:" + port + "/beers");
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
-        // Find the first "View" button
-        WebElement firstViewButton = webDriver.findElement(By.cssSelector("#beerTable tbody tr:first-child .btn-primary"));
+        // Wait for the table and the first "View" button to be present
+        WebElement firstViewButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#beerTable tbody tr:first-child .btn-primary")));
         String href = firstViewButton.getAttribute("href");
 
         assertNotNull(href, "View button should have a href attribute");
@@ -126,7 +127,6 @@ class BeerListPageIT {
         firstViewButton.click();
 
         // Wait for the new page to load
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.titleIs("Beer Details"));
 
         // Find the beer ID element

@@ -1,7 +1,9 @@
 package guru.springframework.spring6restclient.web.ui;
 
+import guru.springframework.spring6restclient.client.BeerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -11,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,6 +23,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
+import static guru.springframework.spring6restclient.test.util.docker.MvcServerTestUtil.checkMvcDatabaseInitDone;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,6 +36,11 @@ class BeerListPageIT {
     private int port;
 
     private WebDriver webDriver;
+
+    @BeforeAll
+    static void setUp(@Autowired BeerClient beerClient) {
+        checkMvcDatabaseInitDone(beerClient);
+    }
 
     @BeforeEach
     public void setUp() {

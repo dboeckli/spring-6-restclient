@@ -4,10 +4,12 @@ import guru.springframework.spring6restclient.client.BeerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +60,7 @@ class BeerListPageIT {
     @Order(0)
     void testBeerListPageLoads() {
         webDriver.get("http://localhost:" + port + "/beers");
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
-
-        wait.until(ExpectedConditions.titleIs("Beer List"));
+        waitForPageLoad();
         assertEquals("Beer List", webDriver.getTitle());
     }
 
@@ -68,6 +68,7 @@ class BeerListPageIT {
     @Order(1)
      void testBeerListContainsItems() {
         webDriver.get("http://localhost:" + port + "/beers");
+        waitForPageLoad();
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
@@ -82,6 +83,7 @@ class BeerListPageIT {
     @Order(2)
     void testPaginationExists() {
         webDriver.get("http://localhost:" + port + "/beers");
+        waitForPageLoad();
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         // Check if pagination exists
@@ -117,6 +119,7 @@ class BeerListPageIT {
     @Order(3)
     void testViewButtonWorks() {
         webDriver.get("http://localhost:" + port + "/beers");
+        waitForPageLoad();
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         // Wait for the table and the first "View" button to be present
@@ -147,4 +150,10 @@ class BeerListPageIT {
                 "Displayed beer ID should match the expected ID")
         );
    }
+
+    private void waitForPageLoad() {
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+        wait.until((ExpectedCondition<Boolean>) wd ->
+            Objects.equals(((JavascriptExecutor) wd).executeScript("return document.readyState"), "complete"));
+    }
 }

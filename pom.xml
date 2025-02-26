@@ -68,7 +68,7 @@
             Configure maven settings of IntelliJ to use your personal settings.xml 
             -->
             <id>github</id>
-            <url>https://maven.pkg.github.com/${project.organization.name}</url>
+            <url>https://maven.pkg.github.com/${project.organization.name}/${project.artifactId}</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>

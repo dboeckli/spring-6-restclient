@@ -4,11 +4,19 @@
     "mergeConfidence:all-badges",
     "config:recommended"
   ],
+  
   "enabledManagers": [
-    "docker-compose"
+    "docker-compose",
+    "maven-wrapper"
   ],
-  "docker-compose": {
-    "enabled": true
+
+  "maven-wrapper": {
+    "fileMatch": [
+      "(^|/)mvnw$",
+      "(^|/)mvnw.cmd$",
+      "(^|/).mvn/wrapper/maven-wrapper.properties$"
+    ],
+    "versioning": "maven"
   },
   "docker": {
     "registryUrls": ["https://index.docker.io"]

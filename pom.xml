@@ -39,7 +39,7 @@
         <skip.start.stop.springboot>false</skip.start.stop.springboot>
         
         <logbook.version>3.11.0</logbook.version>
-        <logstash-logback.version>8.0</logstash-logback.version>
+        <logstash-logback.version>8.1</logstash-logback.version>
 
         <webjars-bootstrap.version>5.3.3</webjars-bootstrap.version>
         <webjars-locator.version>0.52</webjars-locator.version>

@@ -1,15 +1,15 @@
 ###
-GET http://localhost:8081/api/v1/customer/listCustomer
+GET http://localhost:{{rest-mvc-port}}/api/v1/customer/listCustomer
 Accept: application/json
 Content-Type: application/json
 
 ###
-GET http://localhost:8081/api/v1/customer/getCustomerById/6294eedb-ce3d-4153-81cd-99b292f3d263
+GET http://localhost:{{rest-mvc-port}}/api/v1/customer/getCustomerById/6294eedb-ce3d-4153-81cd-99b292f3d263
 Accept: application/json
 Content-Type: application/json
 
 ###
-POST http://localhost:8081/api/v1/customer/createCustomer
+POST http://localhost:{{rest-mvc-port}}/api/v1/customer/createCustomer
 Accept: application/json
 Content-Type: application/json
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8081/api/v1/customer/editCustomer/4908886e-8df4-4df1-bdb0-6ac0bae289af
+PUT http://localhost:{{rest-mvc-port}}/api/v1/customer/editCustomer/4908886e-8df4-4df1-bdb0-6ac0bae289af
 Accept: application/json
 Content-Type: application/json
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8081/api/v1/customer/patchCustomer/4908886e-8df4-4df1-bdb0-6ac0bae289af
+PUT http://localhost:{{rest-mvc-port}}/api/v1/customer/patchCustomer/4908886e-8df4-4df1-bdb0-6ac0bae289af
 Accept: application/json
 Content-Type: application/json
 
@@ -38,6 +38,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8081/api/v1/customer/deleteCustomer/9b6f18b9-f521-4400-8699-7e66ae2261ba
+DELETE http://localhost:{{rest-mvc-port}}/api/v1/customer/deleteCustomer/9b6f18b9-f521-4400-8699-7e66ae2261ba
 Accept: application/json
 Content-Type: application/json

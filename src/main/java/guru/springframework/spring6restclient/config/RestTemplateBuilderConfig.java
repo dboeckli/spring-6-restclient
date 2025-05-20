@@ -15,9 +15,6 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.zalando.logbook.Logbook;
 import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Configuration
 public class RestTemplateBuilderConfig {
 

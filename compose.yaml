@@ -57,7 +57,7 @@ services:
     environment:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
       SPRING_PROFILES_ACTIVE: docker
-      SERVER_PORT: 8085
+      SERVER_PORT: 8080
       
       SPRING_CLOUD_GATEWAY_ROUTES[0]_ID: mvc_route
       SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://rest-mvc:8081

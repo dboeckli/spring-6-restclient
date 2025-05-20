@@ -43,15 +43,15 @@ class BeerClientImplWithTestContainerIT {
     BeerClient beerClient;
 
     @Container
-    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.4.4")
+    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.4.5")
         .withNetworkAliases("mysql")
         .withNetwork(sharedNetwork)
-        .withEnv("MYSQL_DATABASE", "restdb")
+        .withEnv("MYSQL_DATABASE", "restmvcdb")
         .withEnv("MYSQL_USER", "restadmin")
         .withEnv("MYSQL_PASSWORD", "password")
         .withEnv("MYSQL_ROOT_PASSWORD", "password")
 
-        .withDatabaseName("restdb")
+        .withDatabaseName("restmvcdb")
         .withUsername("restadmin")
         .withPassword("password")
 
@@ -59,7 +59,7 @@ class BeerClientImplWithTestContainerIT {
         .waitingFor(Wait.forSuccessfulCommand("mysqladmin ping -h localhost -uroot -ppassword"));
 
     @Container
-    static GenericContainer<?> authServer = new GenericContainer<>("domboeckli/spring-6-auth-server:0.0.1-SNAPSHOT")
+    static GenericContainer<?> authServer = new GenericContainer<>("domboeckli/spring-6-auth-server:0.0.4-SNAPSHOT")
         .withNetworkAliases("auth-server")
         .withNetwork(sharedNetwork)
         .withEnv("SERVER_PORT", String.valueOf(AUTH_SERVER_PORT))
@@ -74,14 +74,14 @@ class BeerClientImplWithTestContainerIT {
         );
 
     @Container
-    static GenericContainer<?> restMvc = new GenericContainer<>("domboeckli/spring-6-rest-mvc:0.0.1")
+    static GenericContainer<?> restMvc = new GenericContainer<>("domboeckli/spring-6-rest-mvc:0.0.3-SNAPSHOT")
         .withNetworkAliases("rest-mvc")
         .withExposedPorts(REST_MVC_PORT)
         .withNetwork(sharedNetwork)
-        .withEnv("SPRING_PROFILES_ACTIVE", "localmysql")
+        .withEnv("SPRING_PROFILES_ACTIVE", "mysql")
         .withEnv("SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI", "http://auth-server:" + AUTH_SERVER_PORT)
         .withEnv("SERVER_PORT", String.valueOf(REST_MVC_PORT))
-        .withEnv("SPRING_DATASOURCE_URL", "jdbc:mysql://mysql:3306/restdb")
+        .withEnv("SPRING_DATASOURCE_URL", "jdbc:mysql://mysql:3306/restmvcdb")
         .withEnv("LOGGING_LEVEL_ORG_APACHE_KAFKA_CLIENTS_NETWORKCLIENT", "ERROR")
         .dependsOn(mysql, authServer)
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("rest-mvc")))
@@ -93,7 +93,7 @@ class BeerClientImplWithTestContainerIT {
         );
 
     @Container
-    static GenericContainer<?> restGateway = new GenericContainer<>("domboeckli/spring-6-gateway:0.0.1-SNAPSHOT")
+    static GenericContainer<?> restGateway = new GenericContainer<>("domboeckli/spring-6-gateway:0.0.2-SNAPSHOT")
         .withExposedPorts(REST_GATEWAY_PORT)
         .withNetwork(sharedNetwork)
         .withEnv("SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI", "http://auth-server:" + AUTH_SERVER_PORT)

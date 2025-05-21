@@ -2,23 +2,25 @@
 GET http://localhost:{{rest-mvc-port}}/api/v1/beer/listBeers
 Accept: application/json
 Content-Type: application/json
-Authorization: Bearer eyJraWQiOiJjYmYzODNhNi1iYjcyLTRlMGItOGQ5MS1lYjBhMjhkMzk4MDMiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczNTg5NDQ0OSwic2NvcGUiOlsibWVzc2FnZS5yZWFkIiwibWVzc2FnZS53cml0ZSJdLCJpc3MiOiJodHRwOi8vYXV0aC1zZXJ2ZXI6OTAwMCIsImV4cCI6MTczNTg5NTA0OSwiaWF0IjoxNzM1ODk0NDQ5LCJqdGkiOiI0MjhkZTk4My05MzZiLTQ0NTYtOWM3NS1mYzcwZDVlZTkxNDgifQ.bnoVonvQ73fjWHht1sdWjmAayo364uDKMfYhQNXsLAVlk3-qRZe919vK7AvHdOy_LJfJQCzNJqIzrNbwgO7b7IMImnWiQ7PHYIhPBRVFOumQYfd2r1nkLazEJogov9oD76UfuR0LFsAvT4ffzk_haFfnurp-gU6Rh85gfJMQtiVAo6-3NnH7Gd_Fdu3PvZC9W8cHak-irInznbxCzPglkXIBALQahHQ2-nUYlgPbqsWujopir37aF5mmTT5bUtTyRk8A0-7Zxa9jvDyYzlV8Qp6kSAyqrQk7f9PKxEmTIS-fxNY4gtwgIGxb65Vmus7cuihTLjh6BV7FQs-sMUO4dA
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 ### via gateway: you need to retrieve the token via gateway
 GET http://localhost:{{gateway-port}}/api/v1/beer/listBeers
 Accept: application/json
 Content-Type: application/json
-Authorization: Bearer eyJraWQiOiJjYmYzODNhNi1iYjcyLTRlMGItOGQ5MS1lYjBhMjhkMzk4MDMiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczNTg5NDU0NCwic2NvcGUiOlsibWVzc2FnZS5yZWFkIiwibWVzc2FnZS53cml0ZSJdLCJpc3MiOiJodHRwOi8vYXV0aC1zZXJ2ZXI6OTAwMCIsImV4cCI6MTczNTg5NTE0NCwiaWF0IjoxNzM1ODk0NTQ0LCJqdGkiOiI2ODc0NDY1Ni04ZDMwLTQ2ODUtODZkYS0wMjFjNzUxZGM4NzUifQ.ak0Dt_3NM-swMA8u-PUrfbwFBVsRzUDoM9Vpnbq8fSCDUYKtfNIeOMDHafSnGoEGxInmb3K2v4P3wgoF6DIP_crTg-6mKNUn9JHN6V_z2gePz8dkR2_PVLSlX3PwgAPCHrF3C2MUGKr_mXeIy2ViDDSKJ6vLTX0LX1AX9x9SBum1c_ozxFubl8QJYCWPMbGDYl-kq8pObXhqFVa6mKhfpDszdHiTLDNXi5nmMQNaGGAqa6ALFX0_vrcEpqBdIsPv6sbxG_6lBV0BoqK9-9evJLmtXlXLVNED2odNgTvBUFivnUEeGrfe3Eqxcq4uGbE9eDeNYazAdk56q85SFx6BJA
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 ###
 GET http://localhost:{{rest-mvc-port}}/api/v1/beer/getBeerById/49e0182c-b4d9-4eb1-ab9e-839c40c0c85f
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 ###
 POST http://localhost:{{rest-mvc-port}}/api/v1/beer/createBeer
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 {
   "version": 0,
@@ -33,6 +35,7 @@ Content-Type: application/json
 PUT http://localhost:{{rest-mvc-port}}/api/v1/beer/editBeer/4908886e-8df4-4df1-bdb0-6ac0bae289af
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 {
   "version": 0,
@@ -47,6 +50,7 @@ Content-Type: application/json
 PATCH http://localhost:{{rest-mvc-port}}/api/v1/beer/patchBeer/9d07c34b-36fb-4108-b9ca-0de3393ea2ab
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 {
   "beerName": "patched Beername"
@@ -56,3 +60,4 @@ Content-Type: application/json
 DELETE http://localhost:{{rest-mvc-port}}/api/v1/beer/deleteBeer/6ab05faf-743d-443b-8ad6-5e8ae531d12d
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{$auth.token("auth-id")}}

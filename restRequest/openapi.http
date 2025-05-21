@@ -1,0 +1,4 @@
+### api docs for rest-mvc
+GET http://localhost:{{rest-mvc-port}}/v3/api-docs
+Accept: application/json
+Content-Type: application/json

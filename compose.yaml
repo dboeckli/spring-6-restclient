@@ -3,7 +3,7 @@ services:
     container_name: mysql
     image: mysql:8.4.5
     environment:
-      MYSQL_DATABASE: restdb  
+      MYSQL_DATABASE: restmvcdb
       MYSQL_USER: restadmin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
@@ -19,7 +19,7 @@ services:
       
   auth-server:
     container_name: auth-server
-    image: domboeckli/spring-6-auth-server:0.0.3-SNAPSHOT
+    image: domboeckli/spring-6-auth-server:0.0.4-SNAPSHOT
     ports:
       - "9000:9000"
     expose:
@@ -35,10 +35,12 @@ services:
     expose:
       - 8081
     environment:
-      SPRING_PROFILES_ACTIVE: localmysql
+      SPRING_PROFILES_ACTIVE: mysql
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
+      # TODO: ADD THIS TO RESTTEMPLATE PROJECT
+      SECURITY_AUTH_SERVER_HEALTH_URL: http://auth-server:9000
       SERVER_PORT: 8081
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/restdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/restmvcdb
       LOGGING_LEVEL_ORG_APACHE_KAFKA_CLIENTS_NETWORKCLIENT: ERROR
     depends_on:
       mysql:
@@ -95,9 +97,10 @@ services:
             wget -qO- http://rest-mvc:8081/actuator/health/readiness | grep -q '\"status\":\"UP\"' &&
             wget -qO- http://gateway:8080/actuator/health/readiness | grep -q '\"status\":\"UP\"'
           " ]
-      interval: 10s
+      start_period: 30s
+      interval: 15s
       timeout: 5s
-      retries: 5
+      retries: 10
     command: >
       /bin/sh -c '
       while true; do

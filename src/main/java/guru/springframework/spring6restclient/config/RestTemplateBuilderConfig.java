@@ -15,16 +15,13 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.zalando.logbook.Logbook;
 import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Configuration
 public class RestTemplateBuilderConfig {
 
-    @Value("${rest.template.rootUrl}")
-    String rootUrl;
+    @Value("${rest.mvcUrl}")
+    String mvcUrl;
 
-    @Value("${rest.template.gatewayUrl}")
+    @Value("${rest.gatewayUrl}")
     String gatewayUrl;
 
     @Bean

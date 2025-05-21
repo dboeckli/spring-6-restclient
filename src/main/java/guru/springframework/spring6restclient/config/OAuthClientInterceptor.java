@@ -16,9 +16,6 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Component
 public class OAuthClientInterceptor implements ClientHttpRequestInterceptor {
     private final OAuth2AuthorizedClientManager manager;

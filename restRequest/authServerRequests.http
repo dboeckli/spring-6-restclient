@@ -1,13 +1,20 @@
-### this retrieves the bearer token. use the token in the request below
-POST http://localhost:9000/oauth2/token
+###
+# this requires the authentication server up and running. The token can then be used in the beer and customer requests
+POST http://localhost:{{auth-server-prt}}/oauth2/token
 Authorization: Basic messaging-client secret
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=client_credentials&client_id=user&client_secret=password&scope=message.read message.write
+grant_type=client_credentials&scope=message.read message.write
 
-### this retrieves the bearer token via gateway. use the token in the request below
-POST http://localhost:8080/oauth2/token
+###
+GET http://localhost:{{auth-server-prt}}/.well-known/openid-configuration
 Authorization: Basic messaging-client secret
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=client_credentials&client_id=user&client_secret=password&scope=message.read message.write
+### actuator
+GET http://localhost:{{auth-server-prt}}/actuator/info
+Accept: application/json
+
+### actuator health
+GET http://localhost:{{auth-server-prt}}/actuator/health
+Accept: application/json

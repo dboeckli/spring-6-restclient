@@ -7,9 +7,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Builder
 @Data
 public class BeerDTO {

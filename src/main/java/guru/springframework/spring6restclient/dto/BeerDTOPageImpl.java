@@ -9,11 +9,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @JsonIgnoreProperties(ignoreUnknown = true, value = "pageable")
-public class BeerDTOPageImpl<BeerDTO> extends PageImpl<guru.springframework.spring6restclient.dto.BeerDTO> {
+public class BeerDTOPageImpl<T> extends PageImpl<guru.springframework.spring6restclient.dto.BeerDTO> {
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public BeerDTOPageImpl(@JsonProperty("content") List<guru.springframework.spring6restclient.dto.BeerDTO> content,

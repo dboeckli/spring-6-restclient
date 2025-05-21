@@ -35,7 +35,10 @@ spec:
 
             - name: SECURITY_AUTH_SERVER_HEALTH_URL
               value: "http://{{ .Release.Name }}-spring-6-auth-server.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.authServer.port }}"
-            - name: REST_TEMPLATE_BASE_URL
+            - name: REST_MVCURL
+              value: "http://{{ .Release.Name }}-spring-6-rest-mvc.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.restMvc.port }}"
+            # no gateway here. we go directly to the mvc server
+            - name: REST_GATEWAYURL
               value: "http://{{ .Release.Name }}-spring-6-rest-mvc.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.restMvc.port }}"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
               value: "http://{{ .Release.Name }}-spring-6-auth-server.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.authServer.port }}"

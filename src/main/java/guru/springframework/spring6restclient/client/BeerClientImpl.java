@@ -13,9 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Service
 @RequiredArgsConstructor
 public class BeerClientImpl implements BeerClient {

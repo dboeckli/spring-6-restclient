@@ -1,3 +1,6 @@
+server:
+  port: 8085
+
 spring:
   application:
     name: spring-6-restclient
@@ -47,9 +50,6 @@ logbook:
   predicate:
     exclude:
       - path: /actuator/health    
-
-server:
-  port: 8085
 
 management:
   health:

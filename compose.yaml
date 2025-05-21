@@ -37,7 +37,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: mysql
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
-      # TODO: ADD THIS TO RESTTEMPLATE PROJECT
+
       SECURITY_AUTH_SERVER_HEALTH_URL: http://auth-server:9000
       SERVER_PORT: 8081
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/restmvcdb

@@ -61,12 +61,6 @@ logbook:
 server:
   port: 8085
 
-rest:
-  template:
-    # spring-6-rest-mvc run on port 8081 be we are going via the spring-6-gateway running on port 8080
-    rootUrl: http://localhost:8081
-    gatewayUrl: http://localhost:8080
-    
 management:
   health:
     readinessstate:
@@ -92,3 +86,7 @@ management:
 
 security:
   auth-server-health-url: http://localhost:9000
+
+rest:
+  mvcUrl: http://localhost:8081
+  gatewayUrl: http://localhost:8080

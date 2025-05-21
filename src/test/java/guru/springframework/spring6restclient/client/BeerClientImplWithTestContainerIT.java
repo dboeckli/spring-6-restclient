@@ -130,11 +130,11 @@ class BeerClientImplWithTestContainerIT {
     static void properties(DynamicPropertyRegistry registry) {
         String mvcServerUrl = "http://" + restMvc.getHost() + ":" + restMvc.getFirstMappedPort();
         log.info("### Rest MVC Server URL: " + mvcServerUrl);
-        registry.add("rest.template.rootUrl", () -> mvcServerUrl);
+        registry.add("rest.mvctUrl", () -> mvcServerUrl);
 
         String gatewayServerUrl = "http://" + restGateway.getHost() + ":" + restGateway.getFirstMappedPort();
         log.info("### Rest Gateway Server URL: " + gatewayServerUrl);
-        registry.add("rest.template.gatewayUrl", () -> gatewayServerUrl);
+        registry.add("rest.gatewayUrl", () -> gatewayServerUrl);
 
         String authServerAuthorizationUrl = "http://" + authServer.getHost() + ":" + authServer.getFirstMappedPort() + "/auth2/authorize";
         log.info("### AuthServer Authorization Url: " + authServerAuthorizationUrl);

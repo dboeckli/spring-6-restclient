@@ -16,7 +16,7 @@ public class RestMvcHealthIndicator implements HealthIndicator {
     private final RestClient restClient;
     private final String restMvcUrl;
 
-    public RestMvcHealthIndicator(@Value("${rest.template.rootUrl}") String restMvcUrl) {
+    public RestMvcHealthIndicator(@Value("${rest.mvcUrl}") String restMvcUrl) {
         this.restClient = RestClient.create();
         this.restMvcUrl = restMvcUrl;
     }

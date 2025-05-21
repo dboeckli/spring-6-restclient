@@ -18,10 +18,10 @@ import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
 @Configuration
 public class RestTemplateBuilderConfig {
 
-    @Value("${rest.template.rootUrl}")
-    String rootUrl;
+    @Value("${rest.mvcUrl}")
+    String mvcUrl;
 
-    @Value("${rest.template.gatewayUrl}")
+    @Value("${rest.gatewayUrl}")
     String gatewayUrl;
 
     @Bean

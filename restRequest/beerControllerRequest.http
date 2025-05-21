@@ -4,7 +4,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
 
-### via gateway: you need to retrieve the token via gateway
+### via gateway: you need to retrieve the token via gateway. in kubernetes we do not have the gateway inplace
 GET http://localhost:{{gateway-port}}/api/v1/beer/listBeers
 Accept: application/json
 Content-Type: application/json

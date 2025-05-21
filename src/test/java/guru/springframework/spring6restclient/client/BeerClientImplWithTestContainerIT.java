@@ -33,6 +33,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 class BeerClientImplWithTestContainerIT {
 
+    private static final String REST_MVC_VERSION = "0.0.3-SNAPSHOT";
+    private static final String AUTH_SERVER_VERSION = "0.0.4-SNAPSHOT";
+    private static final String MYSQL_VERSION = "8.4.5";
+    private static final String GATEWAY_VERSION = "0.0.2-SNAPSHOT";
+
+    private static final String DOCKER_REPO = "domboeckli";
+
     static final int REST_MVC_PORT = TestSocketUtils.findAvailableTcpPort();
     static final int AUTH_SERVER_PORT = TestSocketUtils.findAvailableTcpPort();
     static final int REST_GATEWAY_PORT = TestSocketUtils.findAvailableTcpPort();
@@ -43,7 +50,7 @@ class BeerClientImplWithTestContainerIT {
     BeerClient beerClient;
 
     @Container
-    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.4.5")
+    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:" + MYSQL_VERSION)
         .withNetworkAliases("mysql")
         .withNetwork(sharedNetwork)
         .withEnv("MYSQL_DATABASE", "restmvcdb")
@@ -59,7 +66,7 @@ class BeerClientImplWithTestContainerIT {
         .waitingFor(Wait.forSuccessfulCommand("mysqladmin ping -h localhost -uroot -ppassword"));
 
     @Container
-    static GenericContainer<?> authServer = new GenericContainer<>("domboeckli/spring-6-auth-server:0.0.4-SNAPSHOT")
+    static GenericContainer<?> authServer = new GenericContainer<>(DOCKER_REPO + "/spring-6-auth-server:" + AUTH_SERVER_VERSION)
         .withNetworkAliases("auth-server")
         .withNetwork(sharedNetwork)
         .withEnv("SERVER_PORT", String.valueOf(AUTH_SERVER_PORT))
@@ -74,7 +81,7 @@ class BeerClientImplWithTestContainerIT {
         );
 
     @Container
-    static GenericContainer<?> restMvc = new GenericContainer<>("domboeckli/spring-6-rest-mvc:0.0.3-SNAPSHOT")
+    static GenericContainer<?> restMvc = new GenericContainer<>(DOCKER_REPO + "/spring-6-rest-mvc:" + REST_MVC_VERSION)
         .withNetworkAliases("rest-mvc")
         .withExposedPorts(REST_MVC_PORT)
         .withNetwork(sharedNetwork)
@@ -93,7 +100,7 @@ class BeerClientImplWithTestContainerIT {
         );
 
     @Container
-    static GenericContainer<?> restGateway = new GenericContainer<>("domboeckli/spring-6-gateway:0.0.2-SNAPSHOT")
+    static GenericContainer<?> restGateway = new GenericContainer<>(DOCKER_REPO + "/spring-6-gateway:" + GATEWAY_VERSION)
         .withExposedPorts(REST_GATEWAY_PORT)
         .withNetwork(sharedNetwork)
         .withEnv("SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI", "http://auth-server:" + AUTH_SERVER_PORT)

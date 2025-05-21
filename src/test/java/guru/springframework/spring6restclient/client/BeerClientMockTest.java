@@ -63,9 +63,6 @@ public class BeerClientMockTest {
     RestTemplateBuilder restTemplateBuilderConfigured;
 
     @Autowired
-    RestClient.Builder restClientBuilder;
-
-    @Autowired
     ObjectMapper objectMapper;
 
     @Mock
@@ -144,7 +141,7 @@ public class BeerClientMockTest {
         Page<BeerDTO> responsePage = beerClient
                 .listBeers("ALE", null, null, null, null);
 
-        assertThat(responsePage.getContent().size()).isEqualTo(1);
+        assertThat(responsePage.getContent()).hasSize(1);
     }
 
     @Test
@@ -229,7 +226,7 @@ public class BeerClientMockTest {
                 .andRespond(withSuccess(payload, MediaType.APPLICATION_JSON));
 
         Page<BeerDTO> dtos = beerClient.listBeers();
-        assertThat(dtos.getContent().size()).isGreaterThan(0);
+        assertThat(dtos.getContent()).hasSizeGreaterThan(0);
     }
 
     private BeerDTO getBeerDto(){

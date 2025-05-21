@@ -1,3 +1,6 @@
+server:
+  port: 8085
+
 spring:
   application:
     name: spring-6-restclient
@@ -57,9 +60,6 @@ logbook:
       - path: /beer/**
       - path: /webjars/**
       # Add more exclusions as needed
-
-server:
-  port: 8085
 
 management:
   health:

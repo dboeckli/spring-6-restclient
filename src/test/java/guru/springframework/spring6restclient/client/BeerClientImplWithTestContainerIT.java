@@ -36,7 +36,7 @@ class BeerClientImplWithTestContainerIT {
     private static final String REST_MVC_VERSION = "0.0.3-SNAPSHOT";
     private static final String AUTH_SERVER_VERSION = "0.0.4-SNAPSHOT";
     private static final String MYSQL_VERSION = "8.4.5";
-    private static final String GATEWAY_VERSION = "0.0.2-SNAPSHOT";
+    private static final String GATEWAY_VERSION = "0.0.3-SNAPSHOT";
 
     private static final String DOCKER_REPO = "domboeckli";
 

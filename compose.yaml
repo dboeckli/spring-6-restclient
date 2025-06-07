@@ -58,16 +58,25 @@ services:
       - "8080:8080"
     environment:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
-      SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8080
+
+      SECURITY_AUTH_SERVER_HEALTH_URL: http://auth-server:9000
+      SECURITY_REACTIVEMONGO_HEALTH_URL: http://rest-mvc:8081 # by intention, we are the mvc route. This is a workaround to get up status
+      SECURITY_MVC_HEALTH_URL: http://rest-mvc:8081
+      SECURITY_REACTIVE_HEALTH_URL: http://rest-mvc:8081 # by intention, we are the mvc route. This is a workaround to get up status
+      SECURITY_DATAREST_HEALTH_URL: http://rest-mvc:8081 # by intention, we are the mvc route. This is a workaround to get up status
       
-      SPRING_CLOUD_GATEWAY_ROUTES[0]_ID: mvc_route
-      SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://rest-mvc:8081
-      SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]: Path=/api/v1/**
+      SECURITY_AUTHORIZATION_URL_FOR_OPENAPI: http://localhost:9000/oauth2/auth
+      SECURITY_TOKEN_URL_FOR_OPENAPI: https://localhost:9000/oauth2/token
+      SECURITY_REFRESH_URL_FOR_OPENAPI: https://localhost:9000/oauth2/refresh-token
+
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_ID: mvc_route
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_URI: http://rest-mvc:8081
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_PREDICATES[0]: Path=/api/v1/**
       
-      SPRING_CLOUD_GATEWAY_ROUTES[1]_ID: auth_route
-      SPRING_CLOUD_GATEWAY_ROUTES[1]_URI: http://auth-server:9000
-      SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]: Path=/oauth2/**
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_ID: auth_route
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_URI: http://auth-server:9000
+      SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_PREDICATES[0]: Path=/oauth2/**, /.well-known/**, /userinfo, /{subpath}/.well-known/openid-configuration
     depends_on:
       auth-server:
         condition: service_started

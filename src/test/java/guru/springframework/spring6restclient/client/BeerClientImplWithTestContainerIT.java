@@ -108,14 +108,14 @@ class BeerClientImplWithTestContainerIT {
         .withEnv("SPRING_PROFILES_ACTIVE", "docker")
 
         // Route for spring-6-rest-mvc
-        .withEnv("SPRING_CLOUD_GATEWAY_ROUTES[0]_ID", "mvc_route")
-        .withEnv("SPRING_CLOUD_GATEWAY_ROUTES[0]_URI", "http://rest-mvc:" + REST_MVC_PORT)
-        .withEnv("SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]", "Path=/api/v1/**")
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_ID", "mvc_route")
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_URI", "http://rest-mvc:" + REST_MVC_PORT)
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_PREDICATES[0]", "Path=/api/v1/**")
 
         // Route for spring-6-auth-server
-        .withEnv("SPRING_CLOUD_GATEWAY_ROUTES[1]_ID", "auth_route")
-        .withEnv("SPRING_CLOUD_GATEWAY_ROUTES[1]_URI", "http://auth-server:" + AUTH_SERVER_PORT)
-        .withEnv("SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]", "Path=/oauth2/**")
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_ID", "auth_route")
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_URI", "http://auth-server:" + AUTH_SERVER_PORT)
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_PREDICATES[0]", "Path=/oauth2/**, /.well-known/**, /userinfo, /{subpath}/.well-known/openid-configuration")
 
         .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY", "INFO") // SET TRACE for detailed logs
         .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_HTTP_SERVER_REACTIVE", "INFO") // SET DEBUG for detailed logs  

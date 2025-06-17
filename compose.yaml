@@ -61,15 +61,16 @@ services:
       SERVER_PORT: 8080
 
       SECURITY_AUTH_SERVER_HEALTH_URL: http://auth-server:9000
-      SECURITY_REACTIVEMONGO_HEALTH_URL: http://rest-mvc:8081 # by intention, we are the mvc route. This is a workaround to get up status
+      SECURITY_REACTIVEMONGO_HEALTH_URL: http://rest-mvc:8081 # by intention, we use the mvc route. This is a workaround to get up status
       SECURITY_MVC_HEALTH_URL: http://rest-mvc:8081
-      SECURITY_REACTIVE_HEALTH_URL: http://rest-mvc:8081 # by intention, we are the mvc route. This is a workaround to get up status
-      SECURITY_DATAREST_HEALTH_URL: http://rest-mvc:8081 # by intention, we are the mvc route. This is a workaround to get up status
+      SECURITY_REACTIVE_HEALTH_URL: http://rest-mvc:8081 # by intention, we use the mvc route. This is a workaround to get up status
+      SECURITY_DATAREST_HEALTH_URL: http://rest-mvc:8081 # by intention, we use the mvc route. This is a workaround to get up status
       
       SECURITY_AUTHORIZATION_URL_FOR_OPENAPI: http://localhost:9000/oauth2/auth
       SECURITY_TOKEN_URL_FOR_OPENAPI: https://localhost:9000/oauth2/token
       SECURITY_REFRESH_URL_FOR_OPENAPI: https://localhost:9000/oauth2/refresh-token
 
+      # more routes are needed here: actuator and openapi. See Gateway Project
       SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_ID: mvc_route
       SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_URI: http://rest-mvc:8081
       SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[0]_PREDICATES[0]: Path=/api/v1/**

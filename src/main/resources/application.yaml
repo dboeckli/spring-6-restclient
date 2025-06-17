@@ -106,4 +106,4 @@ security:
 
 rest:
   mvcUrl: http://localhost:8081
-  gatewayUrl: http://localhost:8080
+  gatewayUrl: http://localhost:8081 # we use the mvc url directly

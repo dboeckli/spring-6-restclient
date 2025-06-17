@@ -52,7 +52,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @RestClientTest
 public class BeerClientMockTest {
 
-    static final String URL = "http://localhost:8080";
+    static final String URL = "http://localhost:8081";
     public static final String BEARER_TEST = "Bearer test";
 
     BeerClient beerClient;

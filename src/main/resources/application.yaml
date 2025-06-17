@@ -58,6 +58,23 @@ logbook:
       - path: /beers/**
       - path: /beer
       - path: /beer/**
+
+      # Exclude HTML-related calls and web resources
+      - path: /**/*.html
+      - path: /**/*.css
+      - path: /**/*.js
+      - path: /**/*.png
+      - path: /**/*.jpg
+      - path: /**/*.jpeg
+      - path: /**/*.gif
+      - path: /**/*.ico
+      - path: /**/favicon.ico
+      - path: /**/webjars/**
+      # Exclude other common web resources
+      - path: /**/assets/**
+      - path: /**/static/**
+      - path: /**/public/**
+      - path: /**/resources/**
       - path: /webjars/**
       # Add more exclusions as needed
 
@@ -89,4 +106,4 @@ security:
 
 rest:
   mvcUrl: http://localhost:8081
-  gatewayUrl: http://localhost:8080
+  gatewayUrl: http://localhost:8081 # we use the mvc url directly

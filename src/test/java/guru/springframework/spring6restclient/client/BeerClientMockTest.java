@@ -2,7 +2,6 @@ package guru.springframework.spring6restclient.client;
 
 import guru.springframework.spring6restclient.config.OAuthClientInterceptor;
 import guru.springframework.spring6restclient.dto.BeerDTO;
-import guru.springframework.spring6restclient.dto.BeerDTOPageImpl;
 import guru.springframework.spring6restclient.dto.BeerStyle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,7 @@ import org.springframework.boot.restclient.test.autoconfigure.RestClientTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
@@ -253,10 +253,10 @@ public class BeerClientMockTest {
     private PagePayload<BeerDTO> getPagePayload() {
         return new PagePayload<>(
             singletonList(getBeerDto()),
-            new BeerDTOPageImpl.PageMetadata(25, 1, 1L, 1)
+            new PagedModel.PageMetadata(25, 1, 1L, 1)
         );
     }
 
-    private record PagePayload<T>(List<T> content, BeerDTOPageImpl.PageMetadata page) {
+    private record PagePayload<T>(List<T> content, PagedModel.PageMetadata page) {
     }
 }

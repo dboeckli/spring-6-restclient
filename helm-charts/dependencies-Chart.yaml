@@ -15,6 +15,10 @@ dependencies:
     version: v0.0.3-SNAPSHOT
     repository: "oci://registry-1.docker.io/domboeckli"
 
+  - name: spring-6-rest-mvc-kafka
+    version: v0.0.4-SNAPSHOT
+    repository: "oci://registry-1.docker.io/domboeckli"
+
   - name: spring-6-rest-mvc
     version: "v0.0.3-SNAPSHOT"
     repository: "oci://registry-1.docker.io/domboeckli"

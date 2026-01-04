@@ -6,18 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = "pageable")
-public class BeerDTOPageImpl extends PageImpl<guru.springframework.spring6restclient.dto.BeerDTO> {
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public record PageMetadata(Integer size,
-                               Integer number,
-                               Long totalElements,
-                               Integer totalPages) {
-    }
+public class BeerDTOPageImpl extends PageImpl<BeerDTO> {
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public BeerDTOPageImpl(
@@ -25,11 +19,11 @@ public class BeerDTOPageImpl extends PageImpl<guru.springframework.spring6restcl
         List<guru.springframework.spring6restclient.dto.BeerDTO> content,
 
         @JsonProperty("page")
-        PageMetadata page
+        PagedModel.PageMetadata page
     ) {
         super(
             content,
-            PageRequest.of(page.number(), page.size()),
+            PageRequest.of(Math.toIntExact(page.number()), Math.toIntExact(page.size())),
             page.totalElements()
         );
     }

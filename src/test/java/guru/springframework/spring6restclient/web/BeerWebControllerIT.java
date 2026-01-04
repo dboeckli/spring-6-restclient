@@ -42,9 +42,9 @@ class BeerWebControllerIT {
 
         List<BeerDTO> beerList = (List<BeerDTO>)model.getAttribute("beers");
         assertEquals(25, beerList.size());
-        assertEquals(97, model.getAttribute("totalPages"));
+        assertEquals(21, model.getAttribute("totalPages"));
         assertEquals(0, model.getAttribute("currentPage"));
-        assertEquals(2413L, model.getAttribute("totalElements"));
+        assertEquals(503L, model.getAttribute("totalElements"));
         assertEquals(0, model.getAttribute("startPage"));
         assertEquals(4, model.getAttribute("endPage"));
     }
@@ -60,9 +60,9 @@ class BeerWebControllerIT {
 
         List<BeerDTO> beerList = (List<BeerDTO>)model.getAttribute("beers");
         assertEquals(25, beerList.size());
-        assertEquals(97, model.getAttribute("totalPages"));
+        assertEquals(21, model.getAttribute("totalPages"));
         assertEquals(4, model.getAttribute("currentPage"));
-        assertEquals(2413L, model.getAttribute("totalElements"));
+        assertEquals(503L, model.getAttribute("totalElements"));
         assertEquals(3, model.getAttribute("startPage"));
         assertEquals(7, model.getAttribute("endPage"));
     }

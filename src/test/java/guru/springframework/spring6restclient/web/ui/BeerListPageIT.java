@@ -112,7 +112,7 @@ class BeerListPageIT {
         // Check if 'Last' page button exists and is not the same as the first page
         WebElement lastButton = webDriver.findElement(By.id("lastPage"));
         assertNotNull(lastButton, "Last page button should exist");
-        assertEquals("97", lastButton.getText(), "Last page should not be page 1");
+        assertEquals("21", lastButton.getText(), "Last page should not be page 1");
     }
 
     @Test

@@ -30,54 +30,6 @@ spring:
             authorization-uri: http://localhost:9000/auth2/authorize
             token-uri: http://localhost:9000/oauth2/token
             
-logging:
-  level:
-    org.zalando.logbook: TRACE  
-    
-logbook:
-  filter:
-    enabled: true
-  format:
-    style: http
-  obfuscate:
-    headers:
-      - Authorization
-      - X-Secret
-    parameters:
-      - access_token
-      - password
-  predicate:
-    exclude:
-      # Exclude HTML-related calls and specific endpoints that Logbook doesn't handle correctly
-      - path: /actuator/health/**
-      - path: /h2-console/**  # Exclude H2 console
-      - path: /swagger-ui/**  # Exclude Swagger UI if used
-      - path: /v3/api-docs/** # Exclude OpenAPI docs if used
-      - path: /favicon.ico
-      - path: /beers
-      - path: /beers/**
-      - path: /beer
-      - path: /beer/**
-
-      # Exclude HTML-related calls and web resources
-      - path: /**/*.html
-      - path: /**/*.css
-      - path: /**/*.js
-      - path: /**/*.png
-      - path: /**/*.jpg
-      - path: /**/*.jpeg
-      - path: /**/*.gif
-      - path: /**/*.ico
-      - path: /**/favicon.ico
-      - path: /**/webjars/**
-      # Exclude other common web resources
-      - path: /**/assets/**
-      - path: /**/static/**
-      - path: /**/public/**
-      - path: /**/resources/**
-      - path: /webjars/**
-      # Add more exclusions as needed
-
 management:
   health:
     readinessstate:
@@ -85,6 +37,8 @@ management:
     livenessstate:
       enabled: true
   endpoints:
+    access:
+      default: unrestricted
     web:
       exposure:
         include: "*"
@@ -94,12 +48,57 @@ management:
       # This configuration exposes sensitive data and should only be used for development or testing purposes.
       # Ensure this is disabled in any environment where security is a concern.
       show-values: ALWAYS
-    env:
-      show-values: always
     health:
       probes:
         enabled: true
       show-details: always
+  info:
+    build:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+    git:
+      enabled: true
+      mode: full
+  httpexchanges:
+    recording:
+      enabled: true
+      include: request_headers, response_headers, session_id, time_taken
+  observations:
+    annotations:
+      enabled: true
+    http:
+      server:
+        requests:
+          name: http.server.requests
+      client:
+        requests:
+          name: http-client-requests
+
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  tracing:
+    export:
+      otlp:
+        enabled: false
+    sampling:
+      probability: 1.0
+
+  logging:
+    export:
+      enabled: false
+      otlp:
+        enabled: false
+  simple:
+    metrics:
+      export:
+        enabled: false
 
 security:
   auth-server-health-url: http://localhost:9000

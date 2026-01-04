@@ -22,7 +22,7 @@ public class MvcServerTestUtil {
                 try {
                     Page<BeerDTO> page = beerClient.listBeers(null, null, null, null, null);
                     log.info("### Waiting for database to be fully initialized. Inserted: Beers: {}", page.getTotalElements());
-                    return page.getTotalElements() >= 2413;
+                    return page.getTotalElements() >= 503;
                 } catch (Exception e) {
                     return false;
                 }

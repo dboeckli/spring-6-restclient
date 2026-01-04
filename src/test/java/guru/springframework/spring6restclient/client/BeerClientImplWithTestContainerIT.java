@@ -122,7 +122,6 @@ class BeerClientImplWithTestContainerIT {
         .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_REACTIVE", "INFO") // SET DEBUG for detailed logs
         .withEnv("LOGGING_LEVEL_REACTOR_IPC_NETTY", "INFO") // SET DEBUG for detailed logs
         .withEnv("LOGGING_LEVEL_REACTOR_NETTY", "INFO") // SET DEBUG for detailed logs
-        .withEnv("LOGGING_LEVEL_ORG_ZALANDO_LOGBOOK", "TRACE") // SET TRACE for detailed logs
 
         .dependsOn(authServer, restMvc)
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("gateway")))

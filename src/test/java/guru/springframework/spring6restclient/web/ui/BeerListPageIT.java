@@ -45,7 +45,7 @@ class BeerListPageIT {
     @BeforeEach
     void setUp() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");  // Run in headless mode
+        options.addArguments("--headless"); // Run in headless mode
         webDriver = new ChromeDriver(options);
     }
 
@@ -66,15 +66,16 @@ class BeerListPageIT {
 
     @Test
     @Order(1)
-     void testBeerListContainsItems() {
+    void testBeerListContainsItems() {
         webDriver.get("http://localhost:" + port + "/beers");
         waitForPageLoad();
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
-        
+        List<WebElement> beerRows = wait
+            .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+
         log.info("### Found {} beer rows", beerRows.size());
-        
+
         assertFalse(beerRows.isEmpty(), "Beer list should contain items");
         assertEquals(25, beerRows.size());
     }
@@ -93,21 +94,27 @@ class BeerListPageIT {
         // Check if 'Previous' and 'First' are disabled on the first page
         WebElement previousButton = webDriver.findElement(By.id("previousPage"));
         WebElement firstButton = webDriver.findElement(By.id("firstPage"));
-        assertTrue(Objects.requireNonNull(previousButton.findElement(By.xpath("./..")).getAttribute("class")).contains("disabled"), "Previous button should be disabled");
-        assertTrue(Objects.requireNonNull(firstButton.findElement(By.xpath("./..")).getAttribute("class")).contains("disabled"), "First button should be disabled");
+        assertTrue(Objects.requireNonNull(previousButton.findElement(By.xpath("./..")).getAttribute("class"))
+            .contains("disabled"), "Previous button should be disabled");
+        assertTrue(Objects.requireNonNull(firstButton.findElement(By.xpath("./..")).getAttribute("class"))
+            .contains("disabled"), "First button should be disabled");
 
         // Check if page 1 is selected
         WebElement page1Button = webDriver.findElement(By.id("page1"));
-        assertTrue(Objects.requireNonNull(page1Button.findElement(By.xpath("./..")).getAttribute("class")).contains("active"), "Page 1 should be selected");
+        assertTrue(Objects.requireNonNull(page1Button.findElement(By.xpath("./..")).getAttribute("class"))
+            .contains("active"), "Page 1 should be selected");
 
-        // Check number of page number buttons (this may vary, so we'll just ensure there's at least one)
-        List<WebElement> pageNumberButtons = webDriver.findElements(By.cssSelector(".pagination .page-item:not(.disabled) .page-link"));
+        // Check number of page number buttons (this may vary, so we'll just ensure
+        // there's at least one)
+        List<WebElement> pageNumberButtons = webDriver
+            .findElements(By.cssSelector(".pagination .page-item:not(.disabled) .page-link"));
         assertEquals(7, pageNumberButtons.size(), "There should be at least one page number button");
 
         // Check if 'Next' is clickable
         WebElement nextButton = webDriver.findElement(By.id("nextPage"));
         assertTrue(nextButton.isEnabled(), "Next button should be enabled");
-        assertFalse(Objects.requireNonNull(nextButton.findElement(By.xpath("./..")).getAttribute("class")).contains("disabled"), "Next button should not be disabled");
+        assertFalse(Objects.requireNonNull(nextButton.findElement(By.xpath("./..")).getAttribute("class"))
+            .contains("disabled"), "Next button should not be disabled");
 
         // Check if 'Last' page button exists and is not the same as the first page
         WebElement lastButton = webDriver.findElement(By.id("lastPage"));
@@ -123,7 +130,8 @@ class BeerListPageIT {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         // Wait for the table and the first "View" button to be present
-        WebElement firstViewButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#beerTable tbody tr:first-child .btn-primary")));
+        WebElement firstViewButton = wait.until(ExpectedConditions
+            .presenceOfElementLocated(By.cssSelector("#beerTable tbody tr:first-child .btn-primary")));
         String href = firstViewButton.getAttribute("href");
 
         assertNotNull(href, "View button should have a href attribute");
@@ -142,18 +150,17 @@ class BeerListPageIT {
         WebElement beerIdElement = webDriver.findElement(By.id("beerId"));
 
         assertAll("Beer Details Page Assertions",
-            () -> assertEquals("http://localhost:" + port + "/beer/" + expectedBeerId, webDriver.getCurrentUrl(),
-                "Should navigate to the specific beer page"),
-            () -> assertEquals("Beer Details", webDriver.getTitle(),
-                "Page title should be 'Beer Details'"),
-            () -> assertEquals(expectedBeerId, beerIdElement.getText(),
-                "Displayed beer ID should match the expected ID")
-        );
-   }
+                () -> assertEquals("http://localhost:" + port + "/beer/" + expectedBeerId, webDriver.getCurrentUrl(),
+                        "Should navigate to the specific beer page"),
+                () -> assertEquals("Beer Details", webDriver.getTitle(), "Page title should be 'Beer Details'"),
+                () -> assertEquals(expectedBeerId, beerIdElement.getText(),
+                        "Displayed beer ID should match the expected ID"));
+    }
 
     private void waitForPageLoad() {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
-        wait.until((ExpectedCondition<Boolean>) wd ->
-            Objects.equals(((JavascriptExecutor) wd).executeScript("return document.readyState"), "complete"));
+        wait.until((ExpectedCondition<Boolean>) wd -> Objects
+            .equals(((JavascriptExecutor) wd).executeScript("return document.readyState"), "complete"));
     }
+
 }

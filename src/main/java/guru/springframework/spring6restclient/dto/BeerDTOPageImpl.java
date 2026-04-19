@@ -14,30 +14,20 @@ import java.util.List;
 public class BeerDTOPageImpl extends PageImpl<BeerDTO> {
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public BeerDTOPageImpl(
-        @JsonProperty("content")
-        List<guru.springframework.spring6restclient.dto.BeerDTO> content,
+    public BeerDTOPageImpl(@JsonProperty("content") List<guru.springframework.spring6restclient.dto.BeerDTO> content,
 
-        @JsonProperty("page")
-        PagedModel.PageMetadata page
-    ) {
-        super(
-            content,
-            PageRequest.of(Math.toIntExact(page.number()), Math.toIntExact(page.size())),
-            page.totalElements()
-        );
+            @JsonProperty("page") PagedModel.PageMetadata page) {
+        super(content, PageRequest.of(Math.toIntExact(page.number()), Math.toIntExact(page.size())),
+                page.totalElements());
     }
 
-    public BeerDTOPageImpl(
-        List<guru.springframework.spring6restclient.dto.BeerDTO> content,
-        Pageable pageable,
-        long total
-    ) {
+    public BeerDTOPageImpl(List<guru.springframework.spring6restclient.dto.BeerDTO> content, Pageable pageable,
+            long total) {
         super(content, pageable, total);
     }
 
     public BeerDTOPageImpl(List<guru.springframework.spring6restclient.dto.BeerDTO> content) {
         super(content);
     }
-}
 
+}

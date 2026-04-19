@@ -18,16 +18,20 @@ import static java.util.Objects.isNull;
 
 @Component
 public class OAuthClientInterceptor implements ClientHttpRequestInterceptor {
+
     private final OAuth2AuthorizedClientManager manager;
+
     private final ClientRegistration clientRegistration;
 
-    public OAuthClientInterceptor(OAuth2AuthorizedClientManager manager, ClientRegistrationRepository clientRegistrationRepository) {
+    public OAuthClientInterceptor(OAuth2AuthorizedClientManager manager,
+            ClientRegistrationRepository clientRegistrationRepository) {
         this.manager = manager;
         this.clientRegistration = clientRegistrationRepository.findByRegistrationId("springauth");
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+            throws IOException {
         OAuth2AuthorizeRequest oAuth2AuthorizeRequest = OAuth2AuthorizeRequest
             .withClientRegistrationId(clientRegistration.getRegistrationId())
             .principal(clientRegistration.getClientId())
@@ -39,8 +43,7 @@ public class OAuthClientInterceptor implements ClientHttpRequestInterceptor {
             throw new IllegalStateException("Missing credentials");
         }
 
-        request.getHeaders().add(HttpHeaders.AUTHORIZATION,
-            "Bearer " + client.getAccessToken().getTokenValue());
+        request.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken().getTokenValue());
 
         return execution.execute(request, body);
     }

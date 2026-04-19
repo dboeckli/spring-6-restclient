@@ -13,14 +13,20 @@ public class SecurityConfig {
     @Bean
     @Order(99)
     public SecurityFilterChain filterChain(HttpSecurity http) {
-        http
-            .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()  // permit all actuator endpoints
-                .requestMatchers("/beers/**").permitAll()
-                .requestMatchers("/beer/**").permitAll()
-                .requestMatchers("/webjars/**").permitAll()
-                .requestMatchers("/favicon.ico").permitAll()
-                .anyRequest().authenticated());
+        http.authorizeHttpRequests(
+                authorizeRequests -> authorizeRequests.requestMatchers(EndpointRequest.toAnyEndpoint())
+                    .permitAll() // permit all actuator endpoints
+                    .requestMatchers("/beers/**")
+                    .permitAll()
+                    .requestMatchers("/beer/**")
+                    .permitAll()
+                    .requestMatchers("/webjars/**")
+                    .permitAll()
+                    .requestMatchers("/favicon.ico")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated());
         return http.build();
     }
+
 }

@@ -35,12 +35,12 @@ class BeerWebControllerIT {
     @Order(0)
     void testListBeers() {
         Model model = new ExtendedModelMap();
-        
+
         String viewName = controller.getBeers(null, null, model);
-        
+
         assertEquals("beers", viewName);
 
-        List<BeerDTO> beerList = (List<BeerDTO>)model.getAttribute("beers");
+        List<BeerDTO> beerList = (List<BeerDTO>) model.getAttribute("beers");
         assertEquals(25, beerList.size());
         assertEquals(21, model.getAttribute("totalPages"));
         assertEquals(0, model.getAttribute("currentPage"));
@@ -58,7 +58,7 @@ class BeerWebControllerIT {
 
         assertEquals("beers", viewName);
 
-        List<BeerDTO> beerList = (List<BeerDTO>)model.getAttribute("beers");
+        List<BeerDTO> beerList = (List<BeerDTO>) model.getAttribute("beers");
         assertEquals(25, beerList.size());
         assertEquals(21, model.getAttribute("totalPages"));
         assertEquals(4, model.getAttribute("currentPage"));
@@ -75,7 +75,7 @@ class BeerWebControllerIT {
 
         controller.getBeers(null, null, model);
 
-        List<BeerDTO> beerList = (List<BeerDTO>)model.getAttribute("beers");
+        List<BeerDTO> beerList = (List<BeerDTO>) model.getAttribute("beers");
         BeerDTO beerDTO = beerList.getFirst();
 
         String viewName = controller.getBeerById(beerDTO.getId().toString(), model);
@@ -85,4 +85,5 @@ class BeerWebControllerIT {
         BeerDTO beer = (BeerDTO) model.getAttribute("beer");
         assertEquals(beerDTO.getId(), beer.getId());
     }
+
 }

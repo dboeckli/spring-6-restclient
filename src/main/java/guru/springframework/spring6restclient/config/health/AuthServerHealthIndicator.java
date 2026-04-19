@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 public class AuthServerHealthIndicator implements HealthIndicator {
 
     private final RestTemplate restTemplate;
+
     private final String authServerUrl;
 
     private boolean wasDownLastCheck = true;
@@ -32,12 +33,14 @@ public class AuthServerHealthIndicator implements HealthIndicator {
                 }
                 wasDownLastCheck = false;
                 return Health.up().build();
-            } else {
+            }
+            else {
                 log.warn("Auth server is not reporting UP status at {}", authServerUrl);
                 wasDownLastCheck = true;
                 return Health.down().build();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.warn("Auth server is not reachable at {}", authServerUrl, e);
             wasDownLastCheck = true;
             return Health.down(e).build();

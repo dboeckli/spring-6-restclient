@@ -72,22 +72,17 @@ class BeerWebControllerTest {
         int givenPageNumer = 2;
         int givenPageSize = 3;
         long givenTotalElements = 10L;
-        
-        // Given
-        Page<BeerDTO> beerPage = new PageImpl<>(Arrays.asList(
-            BeerDTO.builder().build(), 
-            BeerDTO.builder().build(), 
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build(),
-            BeerDTO.builder().build()
-        ), Pageable.ofSize(givenPageSize).withPage(givenPageNumer), givenTotalElements);
 
-        when(beerClient.listBeers(isNull(), isNull(), isNull(), eq(givenPageNumer), eq(givenPageSize))).thenReturn(beerPage);
+        // Given
+        Page<BeerDTO> beerPage = new PageImpl<>(
+                Arrays.asList(BeerDTO.builder().build(), BeerDTO.builder().build(), BeerDTO.builder().build(),
+                        BeerDTO.builder().build(), BeerDTO.builder().build(), BeerDTO.builder().build(),
+                        BeerDTO.builder().build(), BeerDTO.builder().build(), BeerDTO.builder().build(),
+                        BeerDTO.builder().build()),
+                Pageable.ofSize(givenPageSize).withPage(givenPageNumer), givenTotalElements);
+
+        when(beerClient.listBeers(isNull(), isNull(), isNull(), eq(givenPageNumer), eq(givenPageSize)))
+            .thenReturn(beerPage);
 
         // When
         String viewName = controller.getBeers(givenPageNumer, givenPageSize, model);

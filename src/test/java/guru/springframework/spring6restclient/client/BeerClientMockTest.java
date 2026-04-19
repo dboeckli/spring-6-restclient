@@ -52,6 +52,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class BeerClientMockTest {
 
     static final String URL = "http://localhost:8081";
+
     public static final String BEARER_TEST = "Bearer test";
 
     BeerClient beerClient;
@@ -82,9 +83,8 @@ public class BeerClientMockTest {
 
         @Bean
         ClientRegistrationRepository clientRegistrationRepository(
-            @Value("${spring.security.oauth2.client.registration.springauth.provider}") String springAuthProviderId) {
-            return new InMemoryClientRegistrationRepository(ClientRegistration
-                .withRegistrationId(springAuthProviderId)
+                @Value("${spring.security.oauth2.client.registration.springauth.provider}") String springAuthProviderId) {
+            return new InMemoryClientRegistrationRepository(ClientRegistration.withRegistrationId(springAuthProviderId)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .clientId("test")
                 .tokenUri("test")
@@ -92,14 +92,14 @@ public class BeerClientMockTest {
         }
 
         @Bean
-        OAuth2AuthorizedClientService oAuth2AuthorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
+        OAuth2AuthorizedClientService oAuth2AuthorizedClientService(
+                ClientRegistrationRepository clientRegistrationRepository) {
             return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
         }
 
         @Bean
-        OAuthClientInterceptor oAuthClientInterceptor(
-            OAuth2AuthorizedClientManager manager,
-            ClientRegistrationRepository clientRegistrationRepository) {
+        OAuthClientInterceptor oAuthClientInterceptor(OAuth2AuthorizedClientManager manager,
+                ClientRegistrationRepository clientRegistrationRepository) {
             return new OAuthClientInterceptor(manager, clientRegistrationRepository);
         }
 
@@ -112,25 +112,22 @@ public class BeerClientMockTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ClientRegistration clientRegistration = clientRegistrationRepository
-            .findByRegistrationId("springauth");
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("springauth");
 
-        OAuth2AccessToken token = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER,
-            "test", Instant.MIN, Instant.MAX);
+        OAuth2AccessToken token = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, "test", Instant.MIN,
+                Instant.MAX);
 
-        when(manager.authorize(any())).thenReturn(new OAuth2AuthorizedClient(clientRegistration,
-            "test", token));
+        when(manager.authorize(any())).thenReturn(new OAuth2AuthorizedClient(clientRegistration, "test", token));
 
         RestTemplate restTemplate = restTemplateBuilderConfigured.build();
         server = MockRestServiceServer.bindTo(restTemplate).build();
         when(mockRestTemplateBuilder.build()).thenReturn(restTemplate);
 
-        //NOTE: RestClient is built using the mockRestTemplateBuilder.
-        //beerClient = new BeerClientImpl(RestClient.builder(mockRestTemplateBuilder.build()));
+        // NOTE: RestClient is built using the mockRestTemplateBuilder.
+        // beerClient = new
+        // BeerClientImpl(RestClient.builder(mockRestTemplateBuilder.build()));
         beerClient = new BeerClientImpl(
-            RestClient.builder(mockRestTemplateBuilder.build())
-                .requestInterceptor(oAuthClientInterceptor)
-        );
+                RestClient.builder(mockRestTemplateBuilder.build()).requestInterceptor(oAuthClientInterceptor));
         dto = getBeerDto();
         dtoJson = objectMapper.writeValueAsString(dto);
     }
@@ -141,7 +138,8 @@ public class BeerClientMockTest {
 
         URI uri = UriComponentsBuilder.fromUriString(BeerClientImpl.LIST_BEER_PATH)
             .queryParam("beerName", "ALE")
-            .build().toUri();
+            .build()
+            .toUri();
 
         server.expect(method(HttpMethod.GET))
             .andExpect(requestTo(uri))
@@ -149,8 +147,7 @@ public class BeerClientMockTest {
             .andExpect(queryParam("beerName", "ALE"))
             .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
-        Page<BeerDTO> responsePage = beerClient
-            .listBeers("ALE", null, null, null, null);
+        Page<BeerDTO> responsePage = beerClient.listBeers("ALE", null, null, null, null);
 
         assertThat(responsePage.getContent()).hasSize(1);
     }
@@ -158,8 +155,7 @@ public class BeerClientMockTest {
     @Test
     void testDeleteNotFound() {
         server.expect(method(HttpMethod.DELETE))
-            .andExpect(requestToUriTemplate(BeerClientImpl.DELETE_BEER_BY_ID_PATH,
-                dto.getId()))
+            .andExpect(requestToUriTemplate(BeerClientImpl.DELETE_BEER_BY_ID_PATH, dto.getId()))
             .andExpect(header("Authorization", BEARER_TEST))
             .andRespond(withResourceNotFound());
 
@@ -171,8 +167,7 @@ public class BeerClientMockTest {
     @Test
     void testDeleteBeer() {
         server.expect(method(HttpMethod.DELETE))
-            .andExpect(requestToUriTemplate(BeerClientImpl.DELETE_BEER_BY_ID_PATH,
-                dto.getId()))
+            .andExpect(requestToUriTemplate(BeerClientImpl.DELETE_BEER_BY_ID_PATH, dto.getId()))
             .andExpect(header("Authorization", BEARER_TEST))
             .andRespond(withNoContent());
 
@@ -184,8 +179,7 @@ public class BeerClientMockTest {
     @Test
     void testUpdateBeer() {
         server.expect(method(HttpMethod.PUT))
-            .andExpect(requestToUriTemplate(BeerClientImpl.UPDATE_BEER_BY_ID_PATH,
-                dto.getId()))
+            .andExpect(requestToUriTemplate(BeerClientImpl.UPDATE_BEER_BY_ID_PATH, dto.getId()))
             .andExpect(header("Authorization", BEARER_TEST))
             .andRespond(withNoContent());
 
@@ -197,8 +191,7 @@ public class BeerClientMockTest {
 
     @Test
     void testCreateBeer() {
-        URI uri = UriComponentsBuilder.fromPath(BeerClientImpl.GET_BEER_BY_ID_PATH)
-            .build(dto.getId());
+        URI uri = UriComponentsBuilder.fromPath(BeerClientImpl.GET_BEER_BY_ID_PATH).build(dto.getId());
 
         server.expect(method(HttpMethod.POST))
             .andExpect(requestTo(BeerClientImpl.CREATE_BEER_PATH))
@@ -251,12 +244,10 @@ public class BeerClientMockTest {
     }
 
     private PagePayload<BeerDTO> getPagePayload() {
-        return new PagePayload<>(
-            singletonList(getBeerDto()),
-            new PagedModel.PageMetadata(25, 1, 1L, 1)
-        );
+        return new PagePayload<>(singletonList(getBeerDto()), new PagedModel.PageMetadata(25, 1, 1L, 1));
     }
 
     private record PagePayload<T>(List<T> content, PagedModel.PageMetadata page) {
     }
+
 }

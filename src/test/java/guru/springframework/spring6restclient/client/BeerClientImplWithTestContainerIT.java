@@ -34,9 +34,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class BeerClientImplWithTestContainerIT {
 
     private static final String REST_MVC_VERSION = "0.0.4-SNAPSHOT";
+
     private static final String AUTH_SERVER_VERSION = "0.0.5-SNAPSHOT";
+
     private static final String MYSQL_VERSION = "8.4.7";
+
     private static final String GATEWAY_VERSION = "0.0.3-SNAPSHOT";
+
     private static final String KAFKA_VERSION = "4.1.1";
 
     private static final String DOCKER_REPO = "domboeckli";
@@ -74,11 +78,11 @@ class BeerClientImplWithTestContainerIT {
         .withEnv("KAFKA_MIN_INSYNC_REPLICAS", "1")
 
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("kafka")))
-        .waitingFor(Wait.forSuccessfulCommand("/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1"));
+        .waitingFor(Wait.forSuccessfulCommand(
+                "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1"));
 
     @Container
-    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:" + MYSQL_VERSION)
-        .withNetworkAliases("mysql")
+    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:" + MYSQL_VERSION).withNetworkAliases("mysql")
         .withNetwork(sharedNetwork)
         .withEnv("MYSQL_DATABASE", "restmvcdb")
         .withEnv("MYSQL_USER", "restadmin")
@@ -93,7 +97,8 @@ class BeerClientImplWithTestContainerIT {
         .waitingFor(Wait.forSuccessfulCommand("mysqladmin ping -h localhost -uroot -ppassword"));
 
     @Container
-    static GenericContainer<?> authServer = new GenericContainer<>(DOCKER_REPO + "/spring-6-auth-server:" + AUTH_SERVER_VERSION)
+    static GenericContainer<?> authServer = new GenericContainer<>(
+            DOCKER_REPO + "/spring-6-auth-server:" + AUTH_SERVER_VERSION)
         .withNetworkAliases("auth-server")
         .withNetwork(sharedNetwork)
         .withEnv("SERVER_PORT", String.valueOf(AUTH_SERVER_PORT))
@@ -102,10 +107,7 @@ class BeerClientImplWithTestContainerIT {
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("auth-server")))
         .waitingFor(Wait.forHttp("/actuator/health/readiness")
             .forStatusCode(200)
-            .forResponsePredicate(response ->
-                response.contains("\"status\":\"UP\"")
-            )
-        );
+            .forResponsePredicate(response -> response.contains("\"status\":\"UP\"")));
 
     @Container
     static GenericContainer<?> restMvc = new GenericContainer<>(DOCKER_REPO + "/spring-6-rest-mvc:" + REST_MVC_VERSION)
@@ -128,13 +130,11 @@ class BeerClientImplWithTestContainerIT {
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("rest-mvc")))
         .waitingFor(Wait.forHttp("/actuator/health/readiness")
             .forStatusCode(200)
-            .forResponsePredicate(response ->
-                response.contains("\"status\":\"UP\"")
-            )
-        );
+            .forResponsePredicate(response -> response.contains("\"status\":\"UP\"")));
 
     @Container
-    static GenericContainer<?> restGateway = new GenericContainer<>(DOCKER_REPO + "/spring-6-gateway:" + GATEWAY_VERSION)
+    static GenericContainer<?> restGateway = new GenericContainer<>(
+            DOCKER_REPO + "/spring-6-gateway:" + GATEWAY_VERSION)
         .withExposedPorts(REST_GATEWAY_PORT)
         .withNetwork(sharedNetwork)
         .withEnv("SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI", "http://auth-server:" + AUTH_SERVER_PORT)
@@ -149,11 +149,22 @@ class BeerClientImplWithTestContainerIT {
         // Route for spring-6-auth-server
         .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_ID", "auth_route")
         .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_URI", "http://auth-server:" + AUTH_SERVER_PORT)
-        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_PREDICATES[0]", "Path=/oauth2/**, /.well-known/**, /userinfo, /{subpath}/.well-known/openid-configuration")
+        .withEnv("SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES[1]_PREDICATES[0]",
+                "Path=/oauth2/**, /.well-known/**, /userinfo, /{subpath}/.well-known/openid-configuration")
 
-        .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY", "INFO") // SET TRACE for detailed logs
-        .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_HTTP_SERVER_REACTIVE", "INFO") // SET DEBUG for detailed logs  
-        .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_REACTIVE", "INFO") // SET DEBUG for detailed logs
+        .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY", "INFO") // SET TRACE
+                                                                            // for
+                                                                            // detailed
+                                                                            // logs
+        .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_HTTP_SERVER_REACTIVE", "INFO") // SET
+                                                                                   // DEBUG
+                                                                                   // for
+                                                                                   // detailed
+                                                                                   // logs
+        .withEnv("LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_REACTIVE", "INFO") // SET DEBUG
+                                                                           // for
+                                                                           // detailed
+                                                                           // logs
         .withEnv("LOGGING_LEVEL_REACTOR_IPC_NETTY", "INFO") // SET DEBUG for detailed logs
         .withEnv("LOGGING_LEVEL_REACTOR_NETTY", "INFO") // SET DEBUG for detailed logs
 
@@ -161,10 +172,7 @@ class BeerClientImplWithTestContainerIT {
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("gateway")))
         .waitingFor(Wait.forHttp("/actuator/health/readiness")
             .forStatusCode(200)
-            .forResponsePredicate(response ->
-                response.contains("\"status\":\"UP\"")
-            )
-        );
+            .forResponsePredicate(response -> response.contains("\"status\":\"UP\"")));
 
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
@@ -176,11 +184,14 @@ class BeerClientImplWithTestContainerIT {
         log.info("### Rest Gateway Server URL: " + gatewayServerUrl);
         registry.add("rest.gatewayUrl", () -> gatewayServerUrl);
 
-        String authServerAuthorizationUrl = "http://" + authServer.getHost() + ":" + authServer.getFirstMappedPort() + "/auth2/authorize";
+        String authServerAuthorizationUrl = "http://" + authServer.getHost() + ":" + authServer.getFirstMappedPort()
+                + "/auth2/authorize";
         log.info("### AuthServer Authorization Url: " + authServerAuthorizationUrl);
-        registry.add("spring.security.oauth2.client.provider.springauth.authorization-uri", () -> authServerAuthorizationUrl);
+        registry.add("spring.security.oauth2.client.provider.springauth.authorization-uri",
+                () -> authServerAuthorizationUrl);
 
-        String authServerTokenUrl = "http://" + authServer.getHost() + ":" + authServer.getFirstMappedPort() + "/oauth2/token";
+        String authServerTokenUrl = "http://" + authServer.getHost() + ":" + authServer.getFirstMappedPort()
+                + "/oauth2/token";
         log.info("### Auth Server Token Url: " + authServerTokenUrl);
         registry.add("spring.security.oauth2.client.provider.springauth.token-uri", () -> authServerTokenUrl);
 
@@ -191,9 +202,12 @@ class BeerClientImplWithTestContainerIT {
 
     @BeforeAll
     static void setUp() {
-        log.info("#### auth server listening on port {} and host: {} and port {}", AUTH_SERVER_PORT, authServer.getHost(), authServer.getFirstMappedPort());
-        log.info("#### gateway server  listening on port {} and host: {} and port {}", REST_GATEWAY_PORT, restGateway.getHost(), restGateway.getFirstMappedPort());
-        log.info("#### mvc server listening on port {} and host: {} and port {}", REST_MVC_PORT, restMvc.getHost(), restMvc.getFirstMappedPort());
+        log.info("#### auth server listening on port {} and host: {} and port {}", AUTH_SERVER_PORT,
+                authServer.getHost(), authServer.getFirstMappedPort());
+        log.info("#### gateway server  listening on port {} and host: {} and port {}", REST_GATEWAY_PORT,
+                restGateway.getHost(), restGateway.getFirstMappedPort());
+        log.info("#### mvc server listening on port {} and host: {} and port {}", REST_MVC_PORT, restMvc.getHost(),
+                restMvc.getFirstMappedPort());
     }
 
     @Test
@@ -212,7 +226,7 @@ class BeerClientImplWithTestContainerIT {
         beerClient.deleteBeer(beerDto.getId());
 
         assertThrows(HttpClientErrorException.class, () -> {
-            //should error
+            // should error
             beerClient.getBeerById(beerDto.getId());
         });
     }
@@ -276,4 +290,5 @@ class BeerClientImplWithTestContainerIT {
         Page<BeerDTO> beersPage = beerClient.listBeers("IPA", null, null, null, null);
         assertEquals(60, beersPage.getTotalElements());
     }
+
 }

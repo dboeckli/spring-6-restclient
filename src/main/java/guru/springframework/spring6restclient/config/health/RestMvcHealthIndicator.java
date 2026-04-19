@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestMvcHealthIndicator implements HealthIndicator {
 
     private final RestTemplate restTemplate;
+
     private final String restMvcUrl;
 
     private boolean wasDownLastCheck = true;
@@ -32,12 +33,14 @@ public class RestMvcHealthIndicator implements HealthIndicator {
                 }
                 wasDownLastCheck = false;
                 return Health.up().build();
-            } else {
+            }
+            else {
                 log.warn("MVC server is not reporting UP status at {}", restMvcUrl);
                 wasDownLastCheck = true;
                 return Health.down().build();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.warn("MVC server is not reachable at {}", restMvcUrl, e);
             wasDownLastCheck = true;
             return Health.down(e).build();

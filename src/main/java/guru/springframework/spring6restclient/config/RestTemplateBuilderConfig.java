@@ -23,18 +23,17 @@ public class RestTemplateBuilderConfig {
     String gatewayUrl;
 
     @Bean
-    OAuth2AuthorizedClientManager auth2AuthorizedClientManager(ClientRegistrationRepository clientRegistrationRepository,
-                                                               OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
-        var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
-            .clientCredentials()
-            .build();
+    OAuth2AuthorizedClientManager auth2AuthorizedClientManager(
+            ClientRegistrationRepository clientRegistrationRepository,
+            OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+        var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder().clientCredentials().build();
 
-        var authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager
-            (clientRegistrationRepository, oAuth2AuthorizedClientService);
+        var authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+                clientRegistrationRepository, oAuth2AuthorizedClientService);
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
         return authorizedClientManager;
     }
-    
+
     @Bean
     public RestClient.Builder restClientBuilder(RestTemplateBuilder restTemplateBuilder) {
         return RestClient.builder(restTemplateBuilder.build());
@@ -42,7 +41,7 @@ public class RestTemplateBuilderConfig {
 
     @Bean
     RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer,
-                                            OAuthClientInterceptor interceptor) {
+            OAuthClientInterceptor interceptor) {
 
         assert gatewayUrl != null;
 
@@ -50,4 +49,5 @@ public class RestTemplateBuilderConfig {
             .additionalInterceptors(interceptor)
             .uriTemplateHandler(new DefaultUriBuilderFactory(gatewayUrl));
     }
+
 }

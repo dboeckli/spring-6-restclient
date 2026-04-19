@@ -20,9 +20,8 @@ public class BeerWebController {
 
     @GetMapping("/beers")
     public String getBeers(@RequestParam(required = false) Integer pageNumber,
-                           @RequestParam(required = false) Integer pageSize,
-                           Model model) {
-        
+            @RequestParam(required = false) Integer pageSize, Model model) {
+
         pageNumber = pageNumber == null ? 0 : pageNumber;
         pageSize = pageSize == null ? 25 : pageSize;
 
@@ -48,4 +47,5 @@ public class BeerWebController {
         model.addAttribute("beer", beerClient.getBeerById(UUID.fromString(beerId)));
         return "beer";
     }
+
 }

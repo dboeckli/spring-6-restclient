@@ -1,6 +1,5 @@
 package guru.springframework.spring6restclient.client;
 
-
 import guru.springframework.spring6restclient.dto.BeerDTO;
 import guru.springframework.spring6restclient.dto.BeerDTOPageImpl;
 import guru.springframework.spring6restclient.dto.BeerStyle;
@@ -18,11 +17,17 @@ import java.util.UUID;
 public class BeerClientImpl implements BeerClient {
 
     public static final String BEER_PATH = "/api/v1/beer";
-    public static final String GET_BEER_BY_ID_PATH    = BEER_PATH + "/getBeerById/{beerId}";
-    public static final String LIST_BEER_PATH         = BEER_PATH + "/listBeers";
-    public static final String CREATE_BEER_PATH       = BEER_PATH + "/createBeer";
+
+    public static final String GET_BEER_BY_ID_PATH = BEER_PATH + "/getBeerById/{beerId}";
+
+    public static final String LIST_BEER_PATH = BEER_PATH + "/listBeers";
+
+    public static final String CREATE_BEER_PATH = BEER_PATH + "/createBeer";
+
     public static final String UPDATE_BEER_BY_ID_PATH = BEER_PATH + "/editBeer/{beerId}";
-    public static final String PATCH_BEER_BY_ID_PATH  = BEER_PATH + "/patchBeer/{beerId}";
+
+    public static final String PATCH_BEER_BY_ID_PATH = BEER_PATH + "/patchBeer/{beerId}";
+
     public static final String DELETE_BEER_BY_ID_PATH = BEER_PATH + "/deleteBeer/{beerId}";
 
     private final RestClient.Builder restClientBuilder;
@@ -33,7 +38,8 @@ public class BeerClientImpl implements BeerClient {
     }
 
     @Override
-    public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+    public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber,
+            Integer pageSize) {
         RestClient restClient = restClientBuilder.build();
 
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath(LIST_BEER_PATH);
@@ -58,10 +64,7 @@ public class BeerClientImpl implements BeerClient {
             uriComponentsBuilder.queryParam("pageSize", pageSize);
         }
 
-        return restClient.get()
-            .uri(uriComponentsBuilder.toUriString())
-            .retrieve()
-            .body(BeerDTOPageImpl.class);
+        return restClient.get().uri(uriComponentsBuilder.toUriString()).retrieve().body(BeerDTOPageImpl.class);
     }
 
     @Override
@@ -85,33 +88,31 @@ public class BeerClientImpl implements BeerClient {
             .toBodilessEntity()
             .getHeaders()
             .getLocation();
-        
-        return restClient.get()
-            .uri(location.getPath())
-            .retrieve()
-            .body(BeerDTO.class);
+
+        return restClient.get().uri(location.getPath()).retrieve().body(BeerDTO.class);
     }
 
     @Override
     public BeerDTO updateBeer(BeerDTO beerDto) {
         RestClient restClient = restClientBuilder.build();
-        
+
         restClient.put()
             .uri(uriBuilder -> uriBuilder.path(UPDATE_BEER_BY_ID_PATH).build(beerDto.getId()))
             .body(beerDto)
             .retrieve()
             .toBodilessEntity();
-        
+
         return getBeerById(beerDto.getId());
     }
 
     @Override
     public void deleteBeer(UUID beerId) {
         RestClient restClient = restClientBuilder.build();
-        
+
         restClient.delete()
             .uri(uriBuilder -> uriBuilder.path(DELETE_BEER_BY_ID_PATH).build(beerId))
             .retrieve()
             .toBodilessEntity();
     }
+
 }

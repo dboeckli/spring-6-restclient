@@ -4,13 +4,17 @@ server:
 spring:
   application:
     name: spring-6-restclient
-    
+
+  threads:
+    virtual:
+      enabled: true
+
   docker:
     compose:
       enabled: true
       stop:
-        command: down  
-  
+        command: down
+
   security:
     oauth2:
       resourceserver:
@@ -29,7 +33,7 @@ spring:
           springauth:
             authorization-uri: http://localhost:9000/auth2/authorize
             token-uri: http://localhost:9000/oauth2/token
-            
+
 management:
   health:
     readinessstate:
@@ -106,3 +110,7 @@ security:
 rest:
   mvcUrl: http://localhost:8081
   gatewayUrl: http://localhost:8081 # we use the mvc url directly
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

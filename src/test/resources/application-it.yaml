@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: spring-6-restclient
+
+  threads:
+    virtual:
+      enabled: true
+
   docker:
     compose:
       enabled: true
@@ -107,3 +112,7 @@ security:
 rest:
   mvcUrl: http://localhost:8081
   gatewayUrl: http://localhost:8080
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

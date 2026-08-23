@@ -17,12 +17,21 @@
         }
     },
     "enabledManagers": [
+        "maven",
         "maven-wrapper",
         "docker-compose",
         "kubernetes",
         "helm-values",
         "helmv3",
         "custom.regex"
+    ],
+    "ignorePaths": [
+        "**/node_modules/**",
+        "**/bower_components/**",
+        "**/vendor/**",
+        "**/examples/**",
+        "**/__tests__/**",
+        "**/__fixtures__/**"
     ],
     "maven-wrapper": {
         "managerFilePatterns": [
@@ -52,6 +61,40 @@
         ]
     },
     "packageRules": [
+        {
+            "description": "Ignore Maven APIs/SPIs",
+            "matchDatasources": [
+                "maven"
+            ],
+            "matchPackageNames": [
+                "org.apache.maven:*"
+            ],
+            "enabled": false
+        },
+        {
+            "matchDatasources": [
+                "helm"
+            ],
+            "matchPackageNames": [
+                "spring-6-auth-server-chart"
+            ],
+            "versioning": "maven",
+            "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+(-snapshot)?$/",
+            "ignoreUnstable": false
+        },
+        {
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchPackageNames": [
+                "docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo/spring-6-rest-mvc-chart",
+                "docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo/spring-6-rest-mvc-mysql-chart",
+                "docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo/spring-6-rest-mvc-kafka-chart"
+            ],
+            "versioning": "maven",
+            "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+(-snapshot)?$/",
+            "ignoreUnstable": false
+        },
         {
             "matchCategories": [
                 "docker"
@@ -112,6 +155,90 @@
                 "  JAVA_VERSION:[\\t ]*(?<currentValue>\\d+)"
             ],
             "autoReplaceStringTemplate": "  JAVA_VERSION: {{{newValue}}}"
+        },
+        {
+            "description": "Update mysql image version in Testcontainers tests",
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "depNameTemplate": "mysql",
+            "managerFilePatterns": [
+                "/(^|\\/)BeerClientImplWithTestContainerIT\\.java$/"
+            ],
+            "matchStrings": [
+                "MYSQL_VERSION = \\\"(?<currentValue>[^\\\"]+)\\\""
+            ]
+        },
+        {
+            "description": "Update kafka image version in Testcontainers tests",
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "depNameTemplate": "apache/kafka",
+            "managerFilePatterns": [
+                "/(^|\\/)BeerClientImplWithTestContainerIT\\.java$/"
+            ],
+            "matchStrings": [
+                "KAFKA_VERSION = \\\"(?<currentValue>[^\\\"]+)\\\""
+            ]
+        },
+        {
+            "description": "Update spring-6-auth-server image version in Testcontainers tests",
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "depNameTemplate": "domboeckli/spring-6-auth-server",
+            "managerFilePatterns": [
+                "/(^|\\/)BeerClientImplWithTestContainerIT\\.java$/"
+            ],
+            "matchStrings": [
+                "AUTH_SERVER_VERSION = \\\"(?<currentValue>[^\\\"]+)\\\""
+            ]
+        },
+        {
+            "description": "Update spring-6-rest-mvc image version in Testcontainers tests",
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "depNameTemplate": "domboeckli/spring-6-rest-mvc",
+            "managerFilePatterns": [
+                "/(^|\\/)BeerClientImplWithTestContainerIT\\.java$/"
+            ],
+            "matchStrings": [
+                "REST_MVC_VERSION = \\\"(?<currentValue>[^\\\"]+)\\\""
+            ]
+        },
+        {
+            "description": "Update spring-6-gateway image version in Testcontainers tests",
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "depNameTemplate": "domboeckli/spring-6-gateway",
+            "managerFilePatterns": [
+                "/(^|\\/)BeerClientImplWithTestContainerIT\\.java$/"
+            ],
+            "matchStrings": [
+                "GATEWAY_VERSION = \\\"(?<currentValue>[^\\\"]+)\\\""
+            ]
+        },
+        {
+            "description": "Update spring-6-auth-server-chart version in dependencies-Chart.yaml",
+            "customType": "regex",
+            "datasourceTemplate": "helm",
+            "managerFilePatterns": [
+                "/(^|\\/)dependencies-Chart\\.ya?ml$/"
+            ],
+            "matchStrings": [
+                "- name: (?<depName>spring-6-auth-server-chart)[\\s\\S]*?version: \\\"(?<currentValue>[^\\\"]+)\\\""
+            ],
+            "registryUrlTemplate": "https://repo.repsy.io/user08694146/helm-dboeckli"
+        },
+        {
+            "description": "Update spring-6-rest-mvc-chart versions in dependencies-Chart.yaml",
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "managerFilePatterns": [
+                "/(^|\\/)dependencies-Chart\\.ya?ml$/"
+            ],
+            "matchStrings": [
+                "- name: (?<depName>spring-6-rest-mvc(-mysql|-kafka)?-chart)[\\s\\S]*?version: \\\"(?<currentValue>[^\\\"]+)\\\""
+            ],
+            "packageNameTemplate": "docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo/{{{depName}}}"
         }
     ],
     "platformAutomerge": false,

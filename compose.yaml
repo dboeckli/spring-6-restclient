@@ -51,7 +51,7 @@ services:
       
   auth-server:
     container_name: auth-server
-    image: domboeckli/spring-6-auth-server:0.0.7-SNAPSHOT
+    image: domboeckli/spring-6-auth-server:0.0.11-snapshot
     ports:
       - "9000:9000"
     expose:
@@ -61,7 +61,7 @@ services:
   
   rest-mvc:
     container_name: rest-mvc
-    image: domboeckli/spring-6-rest-mvc:0.0.4-SNAPSHOT
+    image: domboeckli/spring-6-rest-mvc:0.0.4-snapshot
     ports:
       - "8081:8081"
     expose:
@@ -91,7 +91,7 @@ services:
 
   gateway:
     container_name: gateway
-    image: domboeckli/spring-6-gateway:0.0.3-SNAPSHOT
+    image: domboeckli/spring-6-gateway:0.0.3-snapshot
     expose:
       - 8080
     ports:

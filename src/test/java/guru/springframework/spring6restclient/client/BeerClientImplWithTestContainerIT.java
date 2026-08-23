@@ -37,7 +37,7 @@ class BeerClientImplWithTestContainerIT {
 
     private static final String AUTH_SERVER_VERSION = "0.0.11-snapshot";
 
-    private static final String MYSQL_VERSION = "8.4.7";
+    private static final String MYSQL_VERSION = "8.4.11";
 
     private static final String GATEWAY_VERSION = "0.0.3-snapshot";
 

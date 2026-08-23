@@ -9,23 +9,39 @@ Required other modules up and running:
 
 - spring-6-rest-mvc module running on port 8081 but we are accessing this via module via the gateway which runs on port 8080
 
-```plaintext
-+---------+               +----------------+               +--------------------+
-| Client  |               | Gateway Server |               | Authentication     |
-| (makes  |  -----------> | (Port 8080)    |  -----------> | Server (Port 9000) |
-| request)|  <----------- |                |  <----------- | (returns token)    |
-+---------+               +----------------+               +--------------------+
-                                |   ^  
-                                |   |
-                                v   |
-                           +----------------+               
-                           | MVC Backend    |
-                           | (Port 8081)    |
-                           | (Executes      |
-                           | query and      |
-                           | creates        |
-                           | response)      |
-                           +----------------+
+```mermaid
+graph LR
+    Client(["💻 Client"])
+
+    subgraph Auth ["OAuth2"]
+        AuthServer["Spring Auth Server\n:9000"]
+    end
+
+    subgraph WebApp ["Web Client"]
+        App["Spring RestClient\n:8085"]
+    end
+
+    subgraph Backends ["Backend Services"]
+        Gateway["Spring Gateway\n:8080"]
+        RestMvc["Spring REST MVC\n:8081"]
+    end
+
+    subgraph Databases ["Databases"]
+        MySQL[("MySQL")]
+    end
+
+    subgraph Messaging ["Messaging"]
+        Kafka["Kafka"]
+    end
+
+    AuthServer -->|"issues JWT"| Client
+    Client <-->|"HTTP (Bearer JWT)"| App
+    App <-->|"RestClient /api/v1/**"| Gateway
+    Gateway -->|"routes"| RestMvc
+    App -->|"client credentials"| AuthServer
+    RestMvc -->|"validates JWT"| AuthServer
+    RestMvc <--> MySQL
+    RestMvc <--> Kafka
 ```
 
 ## Web Interface
@@ -90,7 +106,7 @@ cd target/helm/repo
 unpack
 
 ```powershell
-$file = Get-ChildItem -Filter spring-6-restclient-v*.tgz | Select-Object -First 1
+$file = Get-ChildItem -Filter spring-6-restclient-chart-*.tgz | Select-Object -First 1
 tar -xvf $file.Name
 ```
 
@@ -158,3 +174,33 @@ kubectl run busybox-test --rm -it --image=busybox:1.36 --namespace=spring-6-rest
 ```
 
 You can use the actuator rest call to verify via port 30085
+
+## Sandbox (local dev environment)
+
+The sandbox is provisioned by the opencode-sandbox-kit and runs as a Docker container. It mounts this
+repo, starts opencode, and connects the IntelliJ MCP server.
+
+Allow the kit source (GitHub without cloning):
+
+```powershell
+sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\"]"
+```
+
+Start a new sandbox:
+
+```powershell
+sbx run opencode --name spring-6-restclient --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "C:\development\projects\spring-6-restclient"
+```
+
+Start the sandbox with Kubernetes support:
+
+```powershell
+sbx run opencode --name spring-6-restclient --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "C:\development\projects\spring-6-restclient" "$env:USERPROFILE\.kube:ro"
+```
+
+Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
+
+```powershell
+sbx kit add spring-6-restclient "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
+```
+

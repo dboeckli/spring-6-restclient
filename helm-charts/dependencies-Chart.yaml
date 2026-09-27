@@ -13,13 +13,13 @@ dependencies:
     condition: authServer.enabled
   - name: spring-6-rest-mvc-mysql-chart
     version: "0.0.4-snapshot"
-    repository: "oci://docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo"
+    repository: "oci://docker.cloudsmith.io/dboeckli/helm-repo"
     condition: mysql.enabled
   - name: spring-6-rest-mvc-kafka-chart
     version: "0.0.4-snapshot"
-    repository: "oci://docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo"
+    repository: "oci://docker.cloudsmith.io/dboeckli/helm-repo"
     condition: kafka.enabled
   - name: spring-6-rest-mvc-chart
     version: "0.0.4-snapshot"
-    repository: "oci://docker.cloudsmith.io/dboeckli/dboeckli-cloudsmith-repo"
+    repository: "oci://docker.cloudsmith.io/dboeckli/helm-repo"
     condition: restMvc.enabled

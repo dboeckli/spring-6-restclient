@@ -9,6 +9,63 @@ Required other modules up and running:
 
 - spring-6-rest-mvc module running on port 8081 but we are accessing this via module via the gateway which runs on port 8080
 
+## Overview
+
+All components are started automatically with the help of docker-compose.
+
+Without Gateway
+
+```mermaid
+graph LR
+    Client(["💻 Client"])
+
+    subgraph Auth ["OAuth2"]
+        AuthServer["Spring Auth Server\n:9000"]
+    end
+
+    subgraph WebApp ["Web Client"]
+        App["Spring RestClient\n:8085"]
+    end
+
+    subgraph Backends ["Backend Services"]
+        RestMvc["Spring REST MVC\n:8081"]
+    end
+
+    subgraph Messaging ["Messaging"]
+        Kafka[("Kafka\n:9092")]
+    end
+
+    subgraph Drinks ["Drink Microservices"]
+        Cold["spring-6-cold-micro-service\n(ColdListener)"]
+        Cool["spring-6-cool-micro-service\n(CoolListener)"]
+        IceCold["spring-6-icecold-micro-service\n(IceColdListener)"]
+    end
+
+    subgraph Databases ["Databases"]
+        MySQL[("MySQL")]
+    end
+
+    AuthServer -->|"issues JWT"| Client
+    Client <-->|"HTTP (Bearer JWT)"| App
+    App -->|"client credentials"| AuthServer
+    App <-->|"RestClient /api/v1/**"| RestMvc
+    RestMvc -->|"validates JWT"| AuthServer
+    RestMvc <--> MySQL
+    RestMvc <-->|"order.placed"| Kafka
+    RestMvc -->|"drink.request.cold\n(GOSE, WHEAT)"| Kafka
+    RestMvc -->|"drink.request.cool\n(STOUT, PORTER, ALE, IPA, PALE_ALE)"| Kafka
+    RestMvc -->|"drink.request.icecold\n(LAGER, SAISON)"| Kafka
+    Kafka -->|"drink.request.cold"| Cold
+    Kafka -->|"drink.request.cool"| Cool
+    Kafka -->|"drink.request.icecold"| IceCold
+    Cold -->|"drink.prepared"| Kafka
+    Cool -->|"drink.prepared"| Kafka
+    IceCold -->|"drink.prepared"| Kafka
+    Kafka -->|"drink.prepared"| RestMvc
+```
+
+With Gateway
+
 ```mermaid
 graph LR
     Client(["💻 Client"])
@@ -26,23 +83,41 @@ graph LR
         RestMvc["Spring REST MVC\n:8081"]
     end
 
+    subgraph Messaging ["Messaging"]
+        Kafka[("Kafka\n:9092")]
+    end
+
+    subgraph Drinks ["Drink Microservices"]
+        Cold["spring-6-cold-micro-service\n(ColdListener)"]
+        Cool["spring-6-cool-micro-service\n(CoolListener)"]
+        IceCold["spring-6-icecold-micro-service\n(IceColdListener)"]
+    end
+
     subgraph Databases ["Databases"]
         MySQL[("MySQL")]
     end
 
-    subgraph Messaging ["Messaging"]
-        Kafka["Kafka"]
-    end
-
     AuthServer -->|"issues JWT"| Client
     Client <-->|"HTTP (Bearer JWT)"| App
+    App -->|"client credentials"| AuthServer
     App <-->|"RestClient /api/v1/**"| Gateway
     Gateway -->|"routes"| RestMvc
-    App -->|"client credentials"| AuthServer
     RestMvc -->|"validates JWT"| AuthServer
     RestMvc <--> MySQL
-    RestMvc <--> Kafka
+    RestMvc <-->|"order.placed"| Kafka
+    RestMvc -->|"drink.request.cold\n(GOSE, WHEAT)"| Kafka
+    RestMvc -->|"drink.request.cool\n(STOUT, PORTER, ALE, IPA, PALE_ALE)"| Kafka
+    RestMvc -->|"drink.request.icecold\n(LAGER, SAISON)"| Kafka
+    Kafka -->|"drink.request.cold"| Cold
+    Kafka -->|"drink.request.cool"| Cool
+    Kafka -->|"drink.request.icecold"| IceCold
+    Cold -->|"drink.prepared"| Kafka
+    Cool -->|"drink.prepared"| Kafka
+    IceCold -->|"drink.prepared"| Kafka
+    Kafka -->|"drink.prepared"| RestMvc
 ```
+
+The Integration Test covers the scenario with gateway.
 
 ## Web Interface
 
@@ -177,6 +252,12 @@ You can use the actuator rest call to verify via port 30085
 
 ## Sandbox (local dev environment)
 
+The sandbox consists of the app (Spring Boot, port 8085) plus MySQL, Kafka, an auth-server
+(port 9000), the rest-mvc backend (port 8081) and the gateway, provided by `compose.yaml`. The
+services start automatically via spring-boot-docker-compose when the app boots.
+
+### Start the sandbox (opencode-sandbox-kit)
+
 The sandbox is provisioned by the opencode-sandbox-kit and runs as a Docker container. It mounts this
 repo, starts opencode, and connects the IntelliJ MCP server.
 
@@ -193,27 +274,8 @@ sbx run opencode `
     --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
     --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
     --skills=off `
-    --static-mcp idea `
+    --static-mcp idea,k8s,docker `
     . `
     "C:\development\maven-repo:ro"
-```
-
-Start the sandbox with Kubernetes support:
-
-```powershell
-sbx run opencode `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
-    --skills=off `
-    --static-mcp idea `
-    . `
-    "$env:USERPROFILE\.kube:ro" `
-    "C:\development\maven-repo:ro"
-```
-
-Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
-
-```powershell
-sbx kit add opencode-spring-6-restclient "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
 ```
 

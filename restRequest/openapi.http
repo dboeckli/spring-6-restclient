@@ -1,4 +1,6 @@
 ### api docs for rest-mvc
+< scripts/traceparent.js
 GET http://localhost:{{rest-mvc-port}}/v3/api-docs
 Accept: application/json
 Content-Type: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03

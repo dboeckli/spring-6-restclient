@@ -1,20 +1,28 @@
 ###
+< scripts/traceparent.js
 # this requires the authentication server up and running. The token can then be used in the beer and customer requests
 POST http://localhost:{{auth-server-prt}}/oauth2/token
 Authorization: Basic messaging-client secret
 Content-Type: application/x-www-form-urlencoded
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 grant_type=client_credentials&scope=message.read message.write
 
 ###
+< scripts/traceparent.js
 GET http://localhost:{{auth-server-prt}}/.well-known/openid-configuration
 Authorization: Basic messaging-client secret
 Content-Type: application/x-www-form-urlencoded
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 ### actuator
+< scripts/traceparent.js
 GET http://localhost:{{auth-server-prt}}/actuator/info
 Accept: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 ### actuator health
+< scripts/traceparent.js
 GET http://localhost:{{auth-server-prt}}/actuator/health
 Accept: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03

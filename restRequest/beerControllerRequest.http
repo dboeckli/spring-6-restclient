@@ -1,26 +1,34 @@
 ### via rest-mvc: you need to retrieve the token via rest-mvc
+< scripts/traceparent.js
 GET http://localhost:{{rest-mvc-port}}/api/v1/beer/listBeers
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 ### via gateway: you need to retrieve the token via gateway. in kubernetes we do not have the gateway inplace
+< scripts/traceparent.js
 GET http://localhost:{{gateway-port}}/api/v1/beer/listBeers
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 ###
+< scripts/traceparent.js
 GET http://localhost:{{rest-mvc-port}}/api/v1/beer/getBeerById/49e0182c-b4d9-4eb1-ab9e-839c40c0c85f
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 ###
+< scripts/traceparent.js
 POST http://localhost:{{rest-mvc-port}}/api/v1/beer/createBeer
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 {
   "version": 0,
@@ -32,10 +40,12 @@ Authorization: Bearer {{$auth.token("auth-id")}}
 }
 
 ###
+< scripts/traceparent.js
 PUT http://localhost:{{rest-mvc-port}}/api/v1/beer/editBeer/4908886e-8df4-4df1-bdb0-6ac0bae289af
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 {
   "version": 0,
@@ -47,17 +57,21 @@ Authorization: Bearer {{$auth.token("auth-id")}}
 }
 
 ###
+< scripts/traceparent.js
 PATCH http://localhost:{{rest-mvc-port}}/api/v1/beer/patchBeer/9d07c34b-36fb-4108-b9ca-0de3393ea2ab
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03
 
 {
   "beerName": "patched Beername"
 }
 
 ###
+< scripts/traceparent.js
 DELETE http://localhost:{{rest-mvc-port}}/api/v1/beer/deleteBeer/6ab05faf-743d-443b-8ad6-5e8ae531d12d
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
+traceparent: 00-{{traceId}}-{{spanId}}-03

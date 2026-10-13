@@ -9,7 +9,7 @@ appVersion: 0.0.1
 dependencies:
   - name: spring-6-auth-server-chart
     version: "0.0.11-snapshot"
-    repository: "oci://repo.repsy.io/user08694146/helm-dboeckli"
+    repository: "oci://registry-1.docker.io/domboeckli"
     condition: authServer.enabled
   - name: spring-6-rest-mvc-mysql-chart
     version: "0.0.4-snapshot"

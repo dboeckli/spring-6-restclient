@@ -41,7 +41,7 @@ class BeerClientImplWithTestContainerIT {
 
     private static final String GATEWAY_VERSION = "0.0.3-snapshot";
 
-    private static final String KAFKA_VERSION = "4.3.2";
+    private static final String KAFKA_VERSION = "4.4.0";
 
     private static final String DOCKER_REPO = "domboeckli";
 
